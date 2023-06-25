@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ShoppingCart } from "@mui/icons-material";
 
 const Header = () => {
   const [searchtxt, setSearchtxt] = useState("");
   const [isClickMenu, setIsClickMenu] = useState(false);
+  const [isScrollDown, setIsScrollDown] = useState(false);
+
+  const headerRef = useRef(null);
 
   const handleAutoComplete = (event) => {
     setSearchtxt(event.target.searchtxt);
@@ -22,13 +25,32 @@ const Header = () => {
 
     window.addEventListener("resize", handleResize);
 
+    const handleScrollDown = () => {
+      const scrollPosition = window.scrollY;
+      const headerHeight = headerRef.current.offsetHeight;
+            
+      if (scrollPosition > headerHeight) {
+        setIsScrollDown(true);
+      } else {
+        setIsScrollDown(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScrollDown);
+
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
   return (
-    <nav className="font-body h-28 bg-gray-200 flex relative">
+    <nav
+      ref={headerRef}
+      className={`font-body text-white h-24 bg-opacity-75 flex z-10  border-b-2 border-green-300 ${
+        isScrollDown ? "sticky top-0 text-black bg-green-300 transform duration-1000 translate-y-0 border-b-2 border-green-300" : ""
+      }`}
+      style={{ position: "fixed", width: "100%" }}
+    >
       <div className="flex flex-1 justify-between items-center">
         <div className="flex items-center ml-10 w-3/6">
           <div>logo</div>
@@ -36,29 +58,38 @@ const Header = () => {
             className="p-2 rounded ml-10"
             placeholder="Search"
             value={searchtxt}
+            i
             onChange={(event) => handleAutoComplete(event)}
           />
         </div>
 
         <div
-          className={`flex flex-1 items-center justify-around opacity-0 sm:opacity-100  ${
+          className={`flex flex-1 items-center justify-around opacity-0 sm:opacity-100 ${
             isClickMenu
-              ? "flex flex-col mt-80 right-0 transition-all duration-500 bg-green-300 p-2 rounded-bl opacity-100"
+              ? "flex flex-col z-10 mt-80 right-0 transition-all duration-500 bg-green-300 p-2 rounded-bl opacity-100"
               : ""
           }`}
         >
           <React.Fragment>
-            <div className={isClickMenu ? "p-2" : ""}>Home</div>
-            <div className={isClickMenu ? "p-2" : ""}>About</div>
-            <div className={isClickMenu ? "p-2" : ""}>Log in</div>
-            <div className={isClickMenu ? "p-2" : ""}>Sign up</div>
+            <div className={isClickMenu ? "p-2" : ""}>
+              <span className="font-body font-semibold">Home</span>
+            </div>
+            <div className={isClickMenu ? "p-2" : ""}>
+              <span className="font-body font-semibold">About</span>
+            </div>
+            <div className={isClickMenu ? "p-2" : ""}>
+              <span className="font-body font-semibold">Log in</span>
+            </div>
+            <div className={isClickMenu ? "p-2" : ""}>
+              <span className="font-body font-semibold">Sign up</span>
+            </div>
             <ShoppingCart className={isClickMenu ? "mt-2" : ""} />
           </React.Fragment>
         </div>
         <div className="flex">
           <button
             onClick={handleClickHumbager}
-            className={`flex flex-col absolute right-8 top-12  opacity-100 sm:opacity-0 cursor-pointer`}
+            className={`flex flex-col absolute right-10 top-9  opacity-100 sm:opacity-0 cursor-pointer`}
           >
             <div
               className={`line1 w-7 h-1 my-0.5 bg-slate-700 rounded transition-all duration-300 ease-in ${

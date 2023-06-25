@@ -3,14 +3,13 @@ import {Route, Routes, BrowserRouter} from "react-router-dom"
 
 //! Pages and Components as router
 
-import Header from '../components/Header'
+import Home from "../pages/Home"
 
 const Navigation = () => {
   return (
     <BrowserRouter>
         <Routes>
-            <Route path='/' Component={Header}/>
-            
+            <Route path='/' Component={Home}/>
         </Routes>
     </BrowserRouter>
   )
