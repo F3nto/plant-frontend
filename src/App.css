@@ -16,3 +16,28 @@
   .App{
     height: 100vh;
   }
+
+  .animated-ellipse {
+    perspective: 800px;
+  }
+
+  .animated-ellipse img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    transform-style: preserve-3d;
+    transform: rotateY(40deg);
+    animation: rotateEllipse 4s linear infinite;
+  }
+
+  @keyframes rotateEllipse {
+    0% {
+      transform: rotateY(40deg);
+    }
+    50% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(40deg);
+    }
+  }

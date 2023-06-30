@@ -51,7 +51,7 @@ const PlantCarousel = () => {
       </div>
       <div className="w-10 h-10 z-10 rounded-full bg-green-200 flex justify-center items-center absolute top-0 bottom-0 right-8 m-auto">
         <button onClick={rightSlider}>
-          <ArrowRightOutlined />
+          <ArrowRightOutlined /> 
         </button>
       </div>
       <div className="flex flex-1 relative overflow-hidden">
@@ -83,7 +83,7 @@ const PlantCarousel = () => {
               <span
                 key={index}
                 className={`dot w-2 h-2 m-1 px-2 rounded-md bg-gray-300 ${
-                  index === slideIndex ? "dot-active bg-green-500" : ""
+                  index === slideIndex ? "dot-active bg-secondary-300" : ""
                 }`}
                 onClick={(index) => navSlide(index)}
               ></span>
@@ -92,13 +92,13 @@ const PlantCarousel = () => {
         </div>
 
         <div className="flex absolute top-0 bottom-0 left-0 right-0 sm:md:lg:right-2/3">
-          <div className="px-5 py-3 justify-center items-center m-auto bg-green-400 rounded">
+          <div className="px-5 py-3 justify-center items-center m-auto bg-primary rounded">
             <button className="font-body font-bold">See More</button>
           </div>
         </div>
-        <div className="flex absolute bottom-0 left-44 xl:2xl:left-24 top-40 sm:md:lg:top-44 right-0 sm:md:lg:right-1/3">
+        <div className="flex absolute bottom-0 left-20 sm:left-44 top-48 sm:md:lg:top-44 right-0 sm:md:lg:right-1/3">
           <div className="m-auto">
-            <p className="font-semibold">
+            <p className="font-semibold text-white">
               <span>
               ရာသီဥတုပြောင်းလဲမှုကို တိုက်ဖျက်ရန်၊ ဂေဟစနစ်များ ပြန်လည်ထူထောင်ရန်၊ လေထုအရည်အသွေးကို မြှင့်တင်ပေး {""}
               </span>

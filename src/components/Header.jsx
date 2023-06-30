@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {useState, useRef, useEffect} from "react";
 import { ShoppingCart } from "@mui/icons-material";
 
 const Header = () => {
@@ -16,43 +16,47 @@ const Header = () => {
     setIsClickMenu((prev) => !prev);
   };
 
+  
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
         setIsClickMenu(false);
       }
     };
-
-    window.addEventListener("resize", handleResize);
-
     const handleScrollDown = () => {
       const scrollPosition = window.scrollY;
-      const headerHeight = headerRef.current.offsetHeight;
-            
-      if (scrollPosition > headerHeight) {
-        setIsScrollDown(true);
-      } else {
-        setIsScrollDown(false);
+      const headerElement = headerRef.current;
+    
+      if (headerElement) {
+        const headerHeight = headerElement.offsetHeight;
+    
+        if (scrollPosition > headerHeight) {
+          setIsScrollDown(true);
+        } else {
+          setIsScrollDown(false);
+        }
       }
     };
-
+  
+    window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", handleScrollDown);
-
+  
     return () => {
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", handleScrollDown);
     };
-  }, []);
+  }, [setIsClickMenu, setIsScrollDown, headerRef]);
 
   return (
     <nav
       ref={headerRef}
       className={`font-body text-white h-24 bg-opacity-75 flex z-10  border-b-2 border-green-300 ${
-        isScrollDown ? "sticky top-0 text-black bg-green-300 transform duration-1000 translate-y-0 border-b-2 border-green-300" : ""
+        isScrollDown ? "sticky top-0 text-black bg-primary transform duration-1000 translate-y-0 border-b-2 border-green-300" : ""
       }`}
       style={{ position: "fixed", width: "100%" }}
     >
       <div className="flex flex-1 justify-between items-center">
-        <div className="flex items-center ml-10 w-3/6">
+        <div className="flex items-center ml-10 w-3/6" style={{color: "black"}}>
           <div>logo</div>
           <input
             className="p-2 rounded ml-10"

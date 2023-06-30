@@ -7,14 +7,14 @@ module.exports = {
         body : "Mulish"
       },
       colors:{
-        primary : "#FF5900",
+        primary : "#02EEB7",
         secondary : {
-          100 : "#D86223",
-          200 : "#FFA06C",
-          300 : "#9A3804",
-          400 : "#5D2E15"
+          100 : "#30C2A0",
+          200 : "#26AB8C",
+          300 : "#077A6C",
+          400 : "#005D4F"
         }
-      }
+      },
     },
   },
   plugins: [],
