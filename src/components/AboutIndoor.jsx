@@ -3,10 +3,10 @@ import { VolunteerActivism } from "@mui/icons-material";
 
 const AboutIndoor = () => {
   return (
-    <div className="h-full -mt-10 mx-auto">
-      <h1 className="font-semibold font-body text-xl ml-10">Indoor Plants</h1>
-      <div className="flex flex-row items-center justify-between">
-        <div style={{ width: "50%", marginLeft: 40 }}>
+    <div className="h-auto sm:h-full mx-auto  bg-gradient-to-r from-green-200 to-green-400">
+      <h1 className="font-semibold font-body text-xl pt-6 ml-10">Indoor Plants</h1>
+      <div className="flex flex-col sm:flex-row items-center justify-between">
+        <div className="w-full sm:w-1/2 ml-0 sm:ml-8">
           <span className="p-3 font-semibold">
             အိမ်တွင်းအပင်များသည် ပိုမိုကျန်းမာပျော်ရွှင်စေပြီး
             စိတ်ပိုင်းဆိုင်ရာနှင့် ရုပ်ပိုင်းဆိုင်ရာကျန်းမာရေးဆိုင်ရာ
@@ -67,8 +67,8 @@ const AboutIndoor = () => {
           <hr />
           <hr className="my-2 border-gray-400 border-none"></hr>
         </div>
-        <div className="flex flex-1 justify-end pr-28">
-          <div className="relative">
+        <div className="flex flex-1 justify-end pr-28 pl-6 mt-4 sm:mt-0">
+          <div className="relative left-14 sm:left-0">
             <img
               src={require("../img/pltdec.png")}
               className="h-auto w-3/4 object-cover"

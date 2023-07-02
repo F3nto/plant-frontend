@@ -3,6 +3,8 @@ import Header from "../components/Header"
 import PlantCarousel from '../components/PlantCarousel'
 import PlantCategories from '../components/PlantCategories'
 import AboutIndoor from "../components/AboutIndoor"
+import IndoorCategories from '../components/IndoorCategories'
+
 const Home = () => {
   return (
   <>
@@ -10,6 +12,7 @@ const Home = () => {
     <PlantCarousel/>
     <PlantCategories/>
     <AboutIndoor/>
+    <IndoorCategories/>
   </>
   )
 }

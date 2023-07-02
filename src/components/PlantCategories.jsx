@@ -32,15 +32,15 @@ const PlantCategories = () => {
   }, [category]);
 
   return (
-    <div className="h-full mt-10">
-      <div className="ml-10">
+    <div className="h-full mx-auto bg-gradient-to-r from-green-200 to-green-500 ">
+      <div className="ml-4 pt-4 sm:ml-10 sm:pt-10">
         <h2 className="text-xl font-body font-semibold">Plant Categories</h2>
       </div>
-      <div className="flex flex-1 relative mt-10 ml-24">
+      <div className="flex flex-1 relative mt-4 sm:mt-10">
         {category.map((item) => {
           return (
             <>
-              <div className="mx-24" key={item._id}>
+              <div className="mx-4 sm:mx-28" key={item._id}>
                 {Object.values(item.img).map((img, imgindex) => {
                   const isActive = imgindex === imgSlideIndex;
                   const imgStyles = {
