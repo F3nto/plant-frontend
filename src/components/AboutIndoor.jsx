@@ -3,8 +3,10 @@ import { VolunteerActivism } from "@mui/icons-material";
 
 const AboutIndoor = () => {
   return (
-    <div className="h-auto sm:h-full mx-auto  bg-gradient-to-r from-green-200 to-green-400">
-      <h1 className="font-semibold font-body text-xl pt-6 ml-10">Indoor Plants</h1>
+    <div className="h-auto sm:h-full mx-auto bg-gradient-to-r from-white to-green-300">
+      <div className="pt-10 pl-10">
+      <h1 className="font-semibold font-body text-xl">Indoor Plants</h1>
+      </div>
       <div className="flex flex-col sm:flex-row items-center justify-between">
         <div className="w-full sm:w-1/2 ml-0 sm:ml-8">
           <span className="p-3 font-semibold">

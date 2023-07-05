@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily:{
-        body : "Mulish"
+        body : "Quicksand"
       },
       colors:{
         primary : "#02EEB7",

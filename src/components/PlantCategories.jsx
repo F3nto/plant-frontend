@@ -32,7 +32,7 @@ const PlantCategories = () => {
   }, [category]);
 
   return (
-    <div className="h-full mx-auto bg-gradient-to-r from-green-200 to-green-500 ">
+    <div className="h-full mx-auto bg-gradient-to-r from-white to-green-300 ">
       <div className="ml-4 pt-4 sm:ml-10 sm:pt-10">
         <h2 className="text-xl font-body font-semibold">Plant Categories</h2>
       </div>
