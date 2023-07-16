@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { FavoriteBorderOutlined, SearchOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { handleAddToWishList } from "../redux/store/actions/wishList";
 
 const IndoorCategories = () => {
-  const [indCate, setIndCate] = useState([]);
   const [isHoveredView, setIsHoveredView] = useState(false);
   const [isHoveredWishList, setIsHoveredWishList] = useState(false);
+  const [indCate, setIndCate] = useState([]);
+  const [isFav, setIsFav] = useState(Array(indCate.length).fill(false));
+
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
+  const wishList = useSelector((state) => state.wishList);
 
   useEffect(() => {
     const url = "http://localhost:3001/api/v1/indoor-plants";
@@ -28,7 +36,6 @@ const IndoorCategories = () => {
     const queryParams = {
       plantName: item.plantName,
       price: item.price,
-      img1: item.moreDetail.img1,
       light: item.moreDetail.light,
       soil: item.moreDetail.soil,
       water: item.moreDetail.water,
@@ -41,6 +48,23 @@ const IndoorCategories = () => {
     navigate(`${url}`, { state: { item } });
   };
 
+  const handleFav = (item, index) => {
+  console.log("item....", item);
+  const isItemInWishList = wishList.some((wish) => wish._id === item._id);
+
+  if (isItemInWishList) {
+    const updatedWishlist = wishList.filter((wish) => wish._id !== item._id);
+    dispatch(handleAddToWishList(updatedWishlist));
+  } else {
+    dispatch(handleAddToWishList([...wishList, item]));
+  }
+
+  setIsFav((prevIsFav) => {
+    const updatedFav = [...prevIsFav];
+    updatedFav[index] = !updatedFav[index];
+    return updatedFav;
+  });
+};
   return (
     <div className="h-auto bg-gradient-to-r from-gray-100 to-gray-300">
       <div className="pt-10 pl-10">
@@ -48,7 +72,7 @@ const IndoorCategories = () => {
           Indoor Plant Categories
         </h2>
       </div>
-      <div className="grid grid-cols-3 gap-4 mx-16">
+      <div className="grid grid-cols- sm:grid-cols-3 gap-4 mx-16">
         {indCate.map((item, index) => {
           return (
             <div
@@ -71,11 +95,19 @@ const IndoorCategories = () => {
                   onMouseEnter={() => setIsHoveredWishList(true)}
                   onMouseLeave={() => setIsHoveredWishList(false)}
                 >
-                  <button>
-                    <FavoriteBorderOutlined />
+                  <button onClick={() => handleFav(item, index)}>
+                    {isFav[index] ? (
+                      <img
+                        src={require("../img/icons/lover.png")}
+                        style={{ width: 25, height: 25 }}
+                        alt=""
+                      />
+                    ) : (
+                      <FavoriteBorderOutlined />
+                    )}
                   </button>
                   <div
-                    className={`hover-text  bg-green-800 p-1 rounded-md absolute -top-10 left-1/2 transform -translate-x-1/2 transition-all duration-200 ${
+                    className={`hover-text  bg-green-800 px-1 rounded absolute -top-9 left-1/2 transform -translate-x-1/2 transition-all duration-200 ${
                       isHoveredWishList
                         ? "opacity-100 visible"
                         : "opacity-0 invisible"
@@ -87,7 +119,7 @@ const IndoorCategories = () => {
                     >
                       Wishlist
                     </span>
-                   
+                    <div class="triangle"></div>
                   </div>
                 </div>
                 <div
@@ -100,7 +132,7 @@ const IndoorCategories = () => {
                   </button>
 
                   <div
-                    className={`hover-text  bg-green-800 p-1 rounded-md absolute -top-10 left-1/2 transform -translate-x-1/2 transition-all duration-200 ${
+                    className={`hover-text  bg-green-800 px-1 rounded absolute -top-9 left-1/2 transform -translate-x-1/2 transition-all duration-200 ${
                       isHoveredView
                         ? "opacity-100 visible"
                         : "opacity-0 invisible"
@@ -112,6 +144,7 @@ const IndoorCategories = () => {
                     >
                       Quick View
                     </span>
+                    <div class="triangle"></div>
                   </div>
                 </div>
               </div>

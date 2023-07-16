@@ -32,15 +32,15 @@ const PlantCategories = () => {
   }, [category]);
 
   return (
-    <div className="h-full mx-auto bg-gradient-to-r from-white to-green-300 ">
+    <div className="h-full bg-gradient-to-r from-white to-green-300 ">
       <div className="ml-4 pt-4 sm:ml-10 sm:pt-10">
         <h2 className="text-xl font-body font-semibold">Plant Categories</h2>
       </div>
-      <div className="flex flex-1 relative mt-4 sm:mt-10">
+      <div className="flex flex-1 relative mt-14 sm:mt-20">
         {category.map((item) => {
           return (
             <>
-              <div className="mx-4 sm:mx-28" key={item._id}>
+              <div className="mx-4 sm:mx-20" key={item._id}>
                 {Object.values(item.img).map((img, imgindex) => {
                   const isActive = imgindex === imgSlideIndex;
                   const imgStyles = {
@@ -58,15 +58,16 @@ const PlantCategories = () => {
                   );
                 })}
               </div>
-              <div className="flex-col z-50">
-                <div className="text-white font-semibold">
-                  <p>{item.plantCateName}</p>
+              <div style = {{marginLeft: "-10px"}} className="flex-1 z-50">
+                <div className="font-semibold -mt-12 sm:-mt-8 ">
+                  <span>{item.plantCateName}</span>
                 </div>
-                <div style={{marginTop:340}} >
-                  <button className="px-5 py-3 bg-primary shadow-green-800 shadow-md rounded-md font-semibold">Show Detail</button>
+                <div style={{ marginTop: 340 , marginLeft:"25px"}}>
+                  <button className="px-5 py-3 bg-primary shadow-green-800 shadow-md rounded-md font-semibold">
+                    Show Detail
+                  </button>
                 </div>
               </div>
-              
             </>
           );
         })}

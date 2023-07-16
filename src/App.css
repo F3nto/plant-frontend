@@ -42,3 +42,30 @@
     }
   }
 
+  .triangle {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #22543D; 
+    bottom: -7px;
+    left: 50%;
+    transform: translateX(-50%) rotate(360deg);
+}
+
+
+
+
+
+
+
+
+ 
+  
+  
+  
+  
+  
+  
+  

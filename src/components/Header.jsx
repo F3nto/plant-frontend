@@ -1,10 +1,18 @@
-import React, {useState, useRef, useEffect} from "react";
-import { ShoppingCart } from "@mui/icons-material";
+import React, { useState, useRef, useEffect } from "react";
+import { ShoppingCart, FavoriteBorderOutlined } from "@mui/icons-material";
+import FavoriteModal from "../Modal/FavoriteModal";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const [searchtxt, setSearchtxt] = useState("");
   const [isClickMenu, setIsClickMenu] = useState(false);
   const [isScrollDown, setIsScrollDown] = useState(false);
+
+  const [favModal, setIsFavModal] = useState(false);
+
+  const wishListQty = useSelector((state) => state.wishList);
+
+  console.log("wishList redux added data...", wishListQty);
 
   const headerRef = useRef(null);
 
@@ -16,7 +24,6 @@ const Header = () => {
     setIsClickMenu((prev) => !prev);
   };
 
-  
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -26,10 +33,10 @@ const Header = () => {
     const handleScrollDown = () => {
       const scrollPosition = window.scrollY;
       const headerElement = headerRef.current;
-    
+
       if (headerElement) {
         const headerHeight = headerElement.offsetHeight;
-    
+
         if (scrollPosition > headerHeight) {
           setIsScrollDown(true);
         } else {
@@ -37,26 +44,31 @@ const Header = () => {
         }
       }
     };
-  
+
     window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", handleScrollDown);
-  
+
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleScrollDown);
     };
   }, [setIsClickMenu, setIsScrollDown, headerRef]);
 
+  const toFavModal = () => {
+    setIsFavModal(true);
+  };
   return (
     <nav
       ref={headerRef}
       className={`font-body text-white h-24 bg-opacity-75 flex z-10  border-b-2 border-green-300 ${
-        isScrollDown ? "sticky top-0 text-black bg-primary transform duration-1000 translate-y-0 border-b-2 border-green-300" : ""
+        isScrollDown
+          ? "sticky top-0 text-black bg-primary transform duration-1000 translate-y-0 border-b-2 border-green-300"
+          : ""
       }`}
       style={{ position: "fixed", width: "100%" }}
     >
-      <div className="flex flex-1 justify-between items-center">
-        <div className="flex items-center ml-10 w-3/6" style={{color: "black"}}>
+      <div className="flex flex-1 justify-between items-center mx-10">
+        <div className="flex items-center" style={{ color: "black" }}>
           <div>logo</div>
           <input
             className="p-2 rounded ml-10"
@@ -68,27 +80,40 @@ const Header = () => {
         </div>
 
         <div
-          className={`flex flex-1 items-center justify-around opacity-0 sm:opacity-100 ${
+          className={`flex flex-1 items-center justify-center opacity-0 sm:opacity-100 ${
             isClickMenu
               ? "flex flex-col z-10 mt-80 right-0 transition-all duration-500 bg-green-300 p-2 rounded-bl opacity-100"
               : ""
           }`}
         >
-          <React.Fragment>
-            <div className={isClickMenu ? "p-2" : ""}>
-              <span className="font-body font-semibold">Home</span>
+          <div className={isClickMenu ? "p-2" : ""}>
+            <span className="font-body font-semibold px-5">Home</span>
+          </div>
+          <div className={isClickMenu ? "p-2" : ""}>
+            <span className="font-body font-semibold px-5">About</span>
+          </div>
+          <div className={isClickMenu ? "p-2" : ""}>
+            <span className="font-body font-semibold px-5">Log in</span>
+          </div>
+          <div className={isClickMenu ? "p-2" : ""}>
+            <span className="font-body font-semibold px-5">Sign up</span>
+          </div>
+          <div className={isClickMenu ? "p-2" : ""}>
+            <span className="font-body font-semibold px-5">Log out</span>
+          </div>
+          <div className="flex justify-center items-center ml-20">
+            <div className="mx-7">
+              <ShoppingCart className={isClickMenu ? "mt-2" : ""} />
             </div>
-            <div className={isClickMenu ? "p-2" : ""}>
-              <span className="font-body font-semibold">About</span>
-            </div>
-            <div className={isClickMenu ? "p-2" : ""}>
-              <span className="font-body font-semibold">Log in</span>
-            </div>
-            <div className={isClickMenu ? "p-2" : ""}>
-              <span className="font-body font-semibold">Sign up</span>
-            </div>
-            <ShoppingCart className={isClickMenu ? "mt-2" : ""} />
-          </React.Fragment>
+            <button onClick={toFavModal} className="relative">
+              <FavoriteBorderOutlined className={isClickMenu ? "mt-2" : ""} />
+              {wishListQty.length !== 0 && wishListQty.length > 0 && (
+                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center w-5 h-5 rounded-full text-xs font-medium bg-secondary-300 text-white">
+                  <p className="font-body">{wishListQty.length}</p>
+                </span>
+              )}
+            </button>
+          </div>
         </div>
         <div className="flex">
           <button
@@ -117,6 +142,12 @@ const Header = () => {
           </button>
         </div>
       </div>
+      {favModal && (
+        <FavoriteModal
+          openModal={favModal}
+          closeModal={() => setIsFavModal(false)}
+        />
+      )}
     </nav>
   );
 };

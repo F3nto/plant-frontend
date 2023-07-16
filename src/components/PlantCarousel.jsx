@@ -43,7 +43,7 @@ const PlantCarousel = () => {
   }, [phts.length]);
 
   return (
-    <div className="flex flex-1 relative h-full">
+    <div className="flex flex-1 relative" style={{height:"100vh"}}>
       <div className="w-10 h-10 z-10 rounded-full bg-green-200 flex justify-center items-center absolute top-0 bottom-0 left-8 m-auto">
         <button onClick={leftSlider}>
           <ArrowLeftOutlined />
