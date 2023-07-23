@@ -77,12 +77,12 @@ const AboutIndoor = () => {
               alt=""
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="animated-ellipse">
+              <div className="transform -translate-x-8 transition-transform ease duration-200">
                 <img
                   width="733"
                   height="424"
                   src="https://wpbingosite.com/wordpress/flacio/wp-content/uploads/2021/12/ellipse-2.png"
-                  className="w-full"
+                  className="w-full animate-spin-slow"
                   alt=""
                   loading="lazy"
                 ></img>
@@ -96,3 +96,4 @@ const AboutIndoor = () => {
 };
 
 export default AboutIndoor;
+

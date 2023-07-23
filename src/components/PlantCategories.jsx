@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const PlantCategories = () => {
   const [category, setCategory] = useState([]);
   const [imgSlideIndex, setImgSlideIndex] = useState(0);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const url = `http://localhost:3001/api/v1/categories`;
@@ -11,7 +14,6 @@ const PlantCategories = () => {
     axios
       .get(`${url}`)
       .then((res) => {
-        console.log("API response", res.data);
         setCategory(res.data);
       })
       .catch((err) => {
@@ -30,6 +32,24 @@ const PlantCategories = () => {
       };
     }
   }, [category]);
+
+  const handleShowDetail = (item) => {
+
+    console.log("handleShow detail item...",item)
+
+    let url = ""
+    switch (item.plantCateName) {
+      case "ဥယျာဉ်ခြံပန်းမန်အပင်များ":
+        url = "/flower";
+        break;
+      case "နှစ်ရှည်သီးပင်စားပင်များ":
+        url = "/fruit";
+        break;
+      default : 
+      alert("No data...")
+    }
+    navigate(url)
+  }
 
   return (
     <div className="h-full bg-gradient-to-r from-white to-green-300 ">
@@ -63,7 +83,7 @@ const PlantCategories = () => {
                   <span>{item.plantCateName}</span>
                 </div>
                 <div style={{ marginTop: 340 , marginLeft:"25px"}}>
-                  <button className="px-5 py-3 bg-primary shadow-green-800 shadow-md rounded-md font-semibold">
+                  <button onClick = {() => handleShowDetail(item)} className="px-5 py-3 bg-primary shadow-green-800 shadow-md rounded-md font-semibold">
                     Show Detail
                   </button>
                 </div>

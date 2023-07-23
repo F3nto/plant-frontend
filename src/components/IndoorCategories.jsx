@@ -3,13 +3,13 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { FavoriteBorderOutlined, SearchOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { handleAddToWishList } from "../redux/store/actions/wishList";
+import { addToWishList , removeFromWishList} from "../redux/store/actions/wishList";
 
 const IndoorCategories = () => {
   const [isHoveredView, setIsHoveredView] = useState(false);
   const [isHoveredWishList, setIsHoveredWishList] = useState(false);
   const [indCate, setIndCate] = useState([]);
-  const [isFav, setIsFav] = useState(Array(indCate.length).fill(false));
+  
 
   const navigate = useNavigate();
 
@@ -23,8 +23,6 @@ const IndoorCategories = () => {
     axios
       .get(`${url}`)
       .then((res) => {
-        console.log("Indoor plants....", res.data);
-
         setIndCate(res.data);
       })
       .catch((err) => {
@@ -33,7 +31,9 @@ const IndoorCategories = () => {
   }, []);
 
   const handleClickSearch = (item) => {
+    console.log("items that go to indoor Detail....", item)
     const queryParams = {
+      _id : item._id,
       plantName: item.plantName,
       price: item.price,
       light: item.moreDetail.light,
@@ -45,26 +45,18 @@ const IndoorCategories = () => {
 
     const url = `/detail?${new URLSearchParams(queryParams).toString()}`;
 
-    navigate(`${url}`, { state: { item } });
+    navigate(`${url}`, { state: { item} });
   };
 
-  const handleFav = (item, index) => {
-  console.log("item....", item);
-  const isItemInWishList = wishList.some((wish) => wish._id === item._id);
+  const handleFav = (item) => {
+    if (wishList.find((wishItem) => wishItem._id === item._id)) {
+      dispatch(removeFromWishList(item._id));
+    } else {
+      dispatch(addToWishList(item));
+    }
 
-  if (isItemInWishList) {
-    const updatedWishlist = wishList.filter((wish) => wish._id !== item._id);
-    dispatch(handleAddToWishList(updatedWishlist));
-  } else {
-    dispatch(handleAddToWishList([...wishList, item]));
-  }
-
-  setIsFav((prevIsFav) => {
-    const updatedFav = [...prevIsFav];
-    updatedFav[index] = !updatedFav[index];
-    return updatedFav;
-  });
 };
+
   return (
     <div className="h-auto bg-gradient-to-r from-gray-100 to-gray-300">
       <div className="pt-10 pl-10">
@@ -96,7 +88,7 @@ const IndoorCategories = () => {
                   onMouseLeave={() => setIsHoveredWishList(false)}
                 >
                   <button onClick={() => handleFav(item, index)}>
-                    {isFav[index] ? (
+                    {wishList.find((wishItem) => wishItem._id === item._id) ? (
                       <img
                         src={require("../img/icons/lover.png")}
                         style={{ width: 25, height: 25 }}

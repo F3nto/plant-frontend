@@ -2,27 +2,38 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
 import { FavoriteBorderOutlined } from "@mui/icons-material";
+import { useSelector, useDispatch } from "react-redux";
+import { addToWishList, removeFromWishList} from "../redux/store/actions/wishList";
 
 const IndoorDetail = () => {
   const location = useLocation();
   const { item } = location.state;
   console.log("indoor detail item...", item);
 
+  const wishList = useSelector((state) => state.wishList);
+
   const [qty, setQty] = useState(1);
-  const [isFav, setIsFav] = useState(false);
+
+  const dispatch = useDispatch();
+ 
 
   const incQty = () => {
     setQty(qty + 1);
   };
-
+                                  
   const decQty = () => {
     if (qty > 1) {
       setQty(qty - 1);
     }
   };
 
-  const handleFavBtn = () => {
-    setIsFav((prev) => !prev);
+  const handleFavBtn = (item) => {
+    if (wishList.find((wishItem) => wishItem._id === item._id)) {
+      dispatch(removeFromWishList(item._id));
+    } else {
+      dispatch(addToWishList(item));
+    }
+
   };
   return (
     <div className="h-auto">
@@ -35,10 +46,10 @@ const IndoorDetail = () => {
           />
           <div className="absolute top-3 right-4">
             <button
-              onClick={handleFavBtn}
+              onClick={() => handleFavBtn(item)}
               className="ml-4 w-10 h-10 z-10 rounded-full shadow-green-700 shadow-sm bg-green-200 flex justify-center items-center"
             >
-              {isFav ? (
+              {wishList.find((wishItem) => wishItem._id === item._id) ? (
                 <img
                   src={require("../../src/img/icons/lover.png")}
                   style={{ width: 25, height: 25 }}

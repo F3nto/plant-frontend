@@ -15,6 +15,22 @@ module.exports = {
           400 : "#005D4F"
         }
       },
+       keyframes: {
+        "spin-slow": {
+          "0%" : {
+            transform: "rotateY(40deg)"
+          },
+          "50%" :{
+            transform: "rotateY(0deg)"
+          },
+          "100%" : {
+            transform: "rotateY(40deg)"
+          }
+        },
+      },
+      animation: {
+        "spin-slow": "spin-slow 4s linear infinite",
+      },
     },
   },
   plugins: [],

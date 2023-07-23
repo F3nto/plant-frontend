@@ -12,8 +12,6 @@ const Header = () => {
 
   const wishListQty = useSelector((state) => state.wishList);
 
-  console.log("wishList redux added data...", wishListQty);
-
   const headerRef = useRef(null);
 
   const handleAutoComplete = (event) => {

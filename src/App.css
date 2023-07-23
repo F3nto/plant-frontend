@@ -17,55 +17,7 @@
     height: 100vh;
   }
 
-  .animated-ellipse {
-    perspective: 800px;
-  }
-
-  .animated-ellipse img {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    transform-style: preserve-3d;
-    transform: rotateY(40deg);
-    animation: rotateEllipse 4s linear infinite;
-  }
-
-  @keyframes rotateEllipse {
-    0% {
-      transform: rotateY(40deg);
-    }
-    50% {
-      transform: rotateY(0deg);
-    }
-    100% {
-      transform: rotateY(40deg);
-    }
-  }
-
-  .triangle {
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-top: 8px solid #22543D; 
-    bottom: -7px;
-    left: 50%;
-    transform: translateX(-50%) rotate(360deg);
-}
-
-
-
-
-
-
-
-
  
-  
-  
-  
-  
   
   
   
