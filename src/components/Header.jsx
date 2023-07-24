@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { ShoppingCart, FavoriteBorderOutlined } from "@mui/icons-material";
 import FavoriteModal from "../Modal/FavoriteModal";
 import { useSelector } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Header = () => {
   const [searchtxt, setSearchtxt] = useState("");
@@ -11,6 +12,16 @@ const Header = () => {
   const [favModal, setIsFavModal] = useState(false);
 
   const wishListQty = useSelector((state) => state.wishList);
+  const [isCurrentRoute, setIsCurrentRoute] = useState(true);
+
+  const navigate = useNavigate();
+
+  const location = useLocation();
+
+  const handleNavigate = () => {
+    navigate("/");
+    setIsCurrentRoute(true);
+  };
 
   const headerRef = useRef(null);
 
@@ -23,6 +34,8 @@ const Header = () => {
   };
 
   useEffect(() => {
+    setIsCurrentRoute(location.pathname === "/");
+
     const handleResize = () => {
       if (window.innerWidth >= 768) {
         setIsClickMenu(false);
@@ -50,14 +63,15 @@ const Header = () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleScrollDown);
     };
-  }, [setIsClickMenu, setIsScrollDown, headerRef]);
+  }, [setIsClickMenu, setIsScrollDown, headerRef, location.pathname]);
 
   const toFavModal = () => {
     setIsFavModal(true);
   };
+
   return (
     <nav
-      ref={headerRef}
+    ref={headerRef}
       className={`font-body text-white h-24 bg-opacity-75 flex z-10  border-b-2 border-green-300 ${
         isScrollDown
           ? "sticky top-0 text-black bg-primary transform duration-1000 translate-y-0 border-b-2 border-green-300"
@@ -84,25 +98,43 @@ const Header = () => {
               : ""
           }`}
         >
-          <div className={isClickMenu ? "p-2" : ""}>
-            <span className="font-body font-semibold px-5">Home</span>
-          </div>
-          <div className={isClickMenu ? "p-2" : ""}>
-            <span className="font-body font-semibold px-5">About</span>
-          </div>
-          <div className={isClickMenu ? "p-2" : ""}>
-            <span className="font-body font-semibold px-5">Log in</span>
-          </div>
-          <div className={isClickMenu ? "p-2" : ""}>
-            <span className="font-body font-semibold px-5">Sign up</span>
-          </div>
-          <div className={isClickMenu ? "p-2" : ""}>
-            <span className="font-body font-semibold px-5">Log out</span>
-          </div>
+          <button onClick={handleNavigate} className={isClickMenu ? "p-2" : ""}>
+            <span
+              className={`font-body font-semibold px-5 hover:underline hover:underline-offset-8 hover:text-green-400  border-green-400 transform hover:scale-110 transition-transform ease-out duration-500                
+              ${
+                isCurrentRoute
+                  ? `text-green-400 underline underline-offset-8  border-green-400 `
+                  : ""
+              }
+              `}
+            >
+              Home
+            </span>
+          </button>
+          <button className={isClickMenu ? "p-2" : ""}>
+            <span className="font-body font-semibold px-5 pb-6 hover:text-green-400 hover:underline hover:underline-offset-8 border-green-400 transform hover:scale-110 transition-transform ease-out duration-500">
+              About
+            </span>
+          </button>
+          <button className={isClickMenu ? "p-2" : ""}>
+            <span className="font-body font-semibold px-5 pb-2 hover:text-green-400 hover:underline hover:underline-offset-8 border-green-400 transform hover:scale-110 transition-transform ease-out duration-500">
+              Log in
+            </span>
+          </button>
+          <button className={isClickMenu ? "p-2" : ""}>
+            <span className="font-body font-semibold px-5 pb-2 hover:text-green-400 hover:underline hover:underline-offset-8 border-green-400 transform hover:scale-110 transition-transform ease-out duration-500">
+              Sign up
+            </span>
+          </button>
+          <button className={isClickMenu ? "p-2" : ""}>
+            <span className="font-body font-semibold px-5 pb-2 hover:text-green-400 hover:underline hover:underline-offset-8 border-green-400 transform hover:scale-110 transition-transform ease-out duration-500">
+              Log out
+            </span>
+          </button>
           <div className="flex justify-center items-center ml-20">
-            <div className="mx-7">
+            <button className="mx-7">
               <ShoppingCart className={isClickMenu ? "mt-2" : ""} />
-            </div>
+            </button>
             <button onClick={toFavModal} className="relative">
               <FavoriteBorderOutlined className={isClickMenu ? "mt-2" : ""} />
               {wishListQty.length !== 0 && wishListQty.length > 0 && (
@@ -144,6 +176,7 @@ const Header = () => {
         <FavoriteModal
           openModal={favModal}
           closeModal={() => setIsFavModal(false)}
+          navigate = {navigate}
         />
       )}
     </nav>

@@ -34,7 +34,7 @@ const IndoorCategories = () => {
     console.log("items that go to indoor Detail....", item)
     const queryParams = {
       _id : item._id,
-      plantName: item.plantName,
+      name: item.name,
       price: item.price,
       light: item.moreDetail.light,
       soil: item.moreDetail.soil,
@@ -43,7 +43,7 @@ const IndoorCategories = () => {
       fertilizer: item.moreDetail.fertilizer,
     };
 
-    const url = `/detail?${new URLSearchParams(queryParams).toString()}`;
+    const url = `/indoor-plant-detail?${new URLSearchParams(queryParams).toString()}`;
 
     navigate(`${url}`, { state: { item} });
   };
@@ -64,7 +64,7 @@ const IndoorCategories = () => {
           Indoor Plant Categories
         </h2>
       </div>
-      <div className="grid grid-cols- sm:grid-cols-3 gap-4 mx-16">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mx-16">
         {indCate.map((item, index) => {
           return (
             <div
@@ -74,7 +74,7 @@ const IndoorCategories = () => {
               <img
                 style={{ width: "70%", height: "70%", position: "relative" }}
                 className="rounded object-cover shadow-md shadow-black"
-                src={item.img}
+                src={item.subImg}
                 alt=""
               />
 
@@ -111,7 +111,7 @@ const IndoorCategories = () => {
                     >
                       Wishlist
                     </span>
-                    <div class="triangle"></div>
+                   
                   </div>
                 </div>
                 <div
@@ -136,18 +136,18 @@ const IndoorCategories = () => {
                     >
                       Quick View
                     </span>
-                    <div class="triangle"></div>
+                   
                   </div>
                 </div>
               </div>
               <div className="pt-3">
                 <p className="text-md font-semibold font-body">
                   <span className="text-gray-600">Name - </span>
-                  {item.plantName}
+                  {item.name}
                 </p>
                 <span className="text-md font-semibold font-body">
                   <span className="text-gray-600">Price - </span>
-                  {item.price}
+                  {item.price} MMK
                 </span>
               </div>
             </div>
