@@ -3,7 +3,12 @@ import { useLocation } from "react-router-dom";
 import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
 import { FavoriteBorderOutlined } from "@mui/icons-material";
 import { useSelector, useDispatch } from "react-redux";
-import { addToWishList, removeFromWishList} from "../redux/store/actions/wishList";
+import {
+  addToWishList,
+  removeFromWishList,
+} from "../redux/store/actions/wishList";
+import { addToCart } from "../redux/store/actions/addToCart";
+import {addToCartQty} from "../redux/store/actions/addToCartQty"
 
 const IndoorDetail = () => {
   const location = useLocation();
@@ -11,16 +16,17 @@ const IndoorDetail = () => {
   console.log("indoor detail item...", item);
 
   const wishList = useSelector((state) => state.wishList);
+  const cart = useSelector((state) => state.addToCart);
+  const cartQty = useSelector((state) => state.addToCartQty)
 
   const [qty, setQty] = useState(1);
 
   const dispatch = useDispatch();
- 
 
   const incQty = () => {
     setQty(qty + 1);
   };
-                                  
+
   const decQty = () => {
     if (qty > 1) {
       setQty(qty - 1);
@@ -32,9 +38,26 @@ const IndoorDetail = () => {
       dispatch(removeFromWishList(item._id));
     } else {
       dispatch(addToWishList(item));
+     
     }
-
   };
+
+
+    const handleCart = (item) => {
+      const existingCartItem = cart.find((cartItem) => cartItem._id === item._id);
+    
+      if (existingCartItem) {
+        // Item already exists in the cart, increase the quantity
+        const cartItemQty = cartQty[item._id]; // Access the quantity using item ID as key
+        const newQuantity = cartItemQty ? cartItemQty.quantity + qty : qty;
+        dispatch(addToCartQty(item._id, newQuantity));
+      } else {
+        // Item does not exist in the cart, add it with the quantity
+        dispatch(addToCart(item));
+        dispatch(addToCartQty(item._id, qty));
+      }
+    };
+  
   return (
     <div className="h-auto">
       <div className="flex justify-between mt-10 mx-4">
@@ -106,11 +129,14 @@ const IndoorDetail = () => {
                 style={{ width: 35, height: 35 }}
               />
             </div>
-            <div className="px-5 py-3 bg-green-600 rounded">
+            <button
+              onClick={() => handleCart(item)}
+              className="px-5 py-3 bg-green-600 rounded"
+            >
               <p className="font-semibold font-body text-xl text-white">
                 Add To Cart
               </p>
-            </div>
+            </button>
           </div>
         </div>
       </div>

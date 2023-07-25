@@ -12,6 +12,7 @@ const Header = () => {
   const [favModal, setIsFavModal] = useState(false);
 
   const wishListQty = useSelector((state) => state.wishList);
+  const cartQty = useSelector((state) => state.addToCart)
   const [isCurrentRoute, setIsCurrentRoute] = useState(true);
 
   const navigate = useNavigate();
@@ -22,6 +23,10 @@ const Header = () => {
     navigate("/");
     setIsCurrentRoute(true);
   };
+
+  const handleAddToCart = () => {
+    navigate("/add-to-cart")
+  }
 
   const headerRef = useRef(null);
 
@@ -132,8 +137,13 @@ const Header = () => {
             </span>
           </button>
           <div className="flex justify-center items-center ml-20">
-            <button className="mx-7">
+            <button onClick={handleAddToCart} className="mx-7 relative">
               <ShoppingCart className={isClickMenu ? "mt-2" : ""} />
+            {cartQty.length !== 0 && cartQty.length > 0 && (
+                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center w-5 h-5 rounded-full text-xs font-medium bg-secondary-300 text-white">
+                  <p className="font-body">{cartQty.length}</p>
+                </span>
+              )}
             </button>
             <button onClick={toFavModal} className="relative">
               <FavoriteBorderOutlined className={isClickMenu ? "mt-2" : ""} />
