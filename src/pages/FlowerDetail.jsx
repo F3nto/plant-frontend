@@ -13,7 +13,7 @@ import {
 import { addToCart } from "../redux/store/actions/addToCart";
 import { addToCartQty } from "../redux/store/actions/addToCartQty";
 
-const FruitDetail = () => {
+const FlowerDetail = () => {
   const location = useLocation();
   const {
     state: { item },
@@ -145,4 +145,4 @@ const FruitDetail = () => {
   );
 };
 
-export default FruitDetail;
+export default FlowerDetail;

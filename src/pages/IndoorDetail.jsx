@@ -8,7 +8,7 @@ import {
   removeFromWishList,
 } from "../redux/store/actions/wishList";
 import { addToCart } from "../redux/store/actions/addToCart";
-import {addToCartQty} from "../redux/store/actions/addToCartQty"
+import { addToCartQty } from "../redux/store/actions/addToCartQty";
 
 const IndoorDetail = () => {
   const location = useLocation();
@@ -17,7 +17,7 @@ const IndoorDetail = () => {
 
   const wishList = useSelector((state) => state.wishList);
   const cart = useSelector((state) => state.addToCart);
-  const cartQty = useSelector((state) => state.addToCartQty)
+  const cartQty = useSelector((state) => state.addToCartQty);
 
   const [qty, setQty] = useState(1);
 
@@ -38,26 +38,24 @@ const IndoorDetail = () => {
       dispatch(removeFromWishList(item._id));
     } else {
       dispatch(addToWishList(item));
-     
     }
   };
 
+  const handleCart = (item) => {
+    const existingCartItem = cart.find((cartItem) => cartItem._id === item._id);
 
-    const handleCart = (item) => {
-      const existingCartItem = cart.find((cartItem) => cartItem._id === item._id);
-    
-      if (existingCartItem) {
-        // Item already exists in the cart, increase the quantity
-        const cartItemQty = cartQty[item._id]; // Access the quantity using item ID as key
-        const newQuantity = cartItemQty ? cartItemQty.quantity + qty : qty;
-        dispatch(addToCartQty(item._id, newQuantity));
-      } else {
-        // Item does not exist in the cart, add it with the quantity
-        dispatch(addToCart(item));
-        dispatch(addToCartQty(item._id, qty));
-      }
-    };
-  
+    if (existingCartItem) {
+      // Item already exists in the cart, increase the quantity
+      const cartItemQty = cartQty[item._id]; // Access the quantity using item ID as key
+      const newQuantity = cartItemQty ? cartItemQty.quantity + qty : qty;
+      dispatch(addToCartQty(item._id, newQuantity));
+    } else {
+      // Item does not exist in the cart, add it with the quantity
+      dispatch(addToCart(item));
+      dispatch(addToCartQty(item._id, qty));
+    }
+  };
+
   return (
     <div className="h-auto">
       <div className="flex justify-between mt-10 mx-4">

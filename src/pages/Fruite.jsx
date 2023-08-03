@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate , Outlet} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import FruitePagination from "../components/Paginate/FruitPagination";
 import { useSelector, useDispatch } from "react-redux";
 import { SearchOutlined, FavoriteBorderOutlined } from "@mui/icons-material";
@@ -79,7 +79,7 @@ const Fruit = () => {
             Perennial plants (နှစ်ရှည်သီးပင်စားပင်များ)
           </h1>
         </div>
-        <div className="flex flex-wrap items-center justify-center mt-4">
+        <div className="flex flex-wrap justify-start mt-4 ml-5">
           {currentPosts.map((item, index) => {
             return (
               <>
@@ -122,7 +122,7 @@ const Fruit = () => {
                           >
                             Wishlist
                           </span>
-                          <div class="triangle"></div>
+                          
                         </div>
                       </div>
                       <div
@@ -176,7 +176,6 @@ const Fruit = () => {
           />
         </div>
       </div>
-      <Outlet />
     </div>
   );
 };

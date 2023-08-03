@@ -9,6 +9,7 @@ import Fruit from "../pages/Fruite";
 import Flower from "../pages/Flower";
 import FruitDetail from "../pages/FruitDetail";
 import AddToCart from "../pages/AddToCart";
+import FlowerDetail from "../pages/FlowerDetail";
 
 const Navigation = () => {
   return (
@@ -20,6 +21,7 @@ const Navigation = () => {
         <Route path="/fruit" Component={Fruit} />
         <Route path="/fruit-detail" Component={FruitDetail} />
         <Route path="/add-to-cart" Component={AddToCart} />
+        <Route path="/flower-detail" Component={FlowerDetail} />
       </Routes>
     </BrowserRouter>
   );

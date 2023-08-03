@@ -31,6 +31,10 @@ const FavoriteModal = ({ openModal, closeModal, navigate }) => {
        url = `/fruit-detail?${new URLSearchParams(
         queryParams
       ).toString()}`;
+    } else if(item.type === "flower") {
+      url = `/flower-detail?${new URLSearchParams(
+        queryParams
+      ).toString()}`;
     }
 
     navigate(`${url}`, { state: { item } });
