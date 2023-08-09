@@ -1,33 +1,31 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import { SearchOutlined, FavoriteBorderOutlined } from "@mui/icons-material";
-import FlowerPagination from "../components/Paginate/FlowerPagination";
+import RawPagination from "../components/Paginate/RawPagination";
 import {
   addToWishList,
   removeFromWishList,
 } from "../redux/store/actions/wishList";
 
-const Flower = () => {
-  const [flower, setFlower] = useState([]);
+const RawMat = () => {
+  const [indRaw, setIndRaw] = useState([]);
 
   const [isHoveredView, setIsHoveredView] = useState(false);
   const [isHoveredWishList, setIsHoveredWishList] = useState(false);
 
-
-
-  const navigate = useNavigate();
-
-  const [currentPage, setCurrentPage] = useState(1); 
+  const [currentPage, setCurrentPage] = useState(1);
 
   const itemPerPage = 8;
 
-  const lastItemIndex = currentPage * itemPerPage; 
+  const lastItemIndex = currentPage * itemPerPage;
 
   const firstItemIndex = lastItemIndex - itemPerPage;
 
-  const currentPosts = flower.slice(firstItemIndex, lastItemIndex); 
+  const currentPosts = indRaw.slice(firstItemIndex, lastItemIndex);
+
+  const navigate = useNavigate();
 
   const wishList = useSelector((state) => state.wishList);
   const dispatch = useDispatch();
@@ -41,8 +39,6 @@ const Flower = () => {
   };
 
   const handleClickSearch = (item) => {
-    console.log("fruit items...", item);
-
     const queryParams = {
       _id: item._id,
       name: item.name,
@@ -56,18 +52,20 @@ const Flower = () => {
       description: item.moreDetail.description,
     };
 
-    const url = `/flower-detail?${new URLSearchParams(queryParams).toString()}`;
+    const url = `/industrial-raw-material-detail?${new URLSearchParams(
+      queryParams
+    ).toString()}`;
 
     navigate(url, { state: { item } });
   };
 
   useEffect(() => {
-    const url = "http://localhost:3001/api/v1/flower";
+    const url = "http://localhost:3001/api/v1/industiral-raw-material";
 
     axios
       .get(`${url}`)
       .then((res) => {
-        setFlower(res.data);
+        setIndRaw(res.data);
       })
       .catch((err) => {
         console.log("error...", err);
@@ -78,7 +76,7 @@ const Flower = () => {
     <div className="h-full mx-10 my-10">
       <div className="pl-8">
         <h1 className="text-lg font-semibold font-body">
-          Horticultural plants (ဥယျာဉ်ခြံပန်းမန်အပင်များ)
+          Industrial Raw-Material (စက်မှုကုန်ကြမ်းသုံးအပင်များ)
         </h1>
       </div>
       <div className="flex flex-wrap justify-start mt-4 ml-5">
@@ -168,15 +166,15 @@ const Flower = () => {
         })}
       </div>
       <div className="flex justify-center mt-8">
-          <FlowerPagination
-            totalLength={flower.length}
-            itemPerPage={itemPerPage}
-            setCurrentPage={setCurrentPage}
-            currentPage={currentPage}
-          />
-        </div>
+        <RawPagination
+          totalLength={indRaw.length}
+          itemPerPage={itemPerPage}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+        />
+      </div>
     </div>
   );
 };
 
-export default Flower;
+export default RawMat;

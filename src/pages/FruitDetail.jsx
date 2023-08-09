@@ -12,7 +12,10 @@ import {
 } from "../redux/store/actions/wishList";
 import { addToCart } from "../redux/store/actions/addToCart";
 import { addToCartQty } from "../redux/store/actions/addToCartQty";
-
+import SignUpModal from "../Modal/SignUpModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 const FruitDetail = () => {
   const location = useLocation();
   const {
@@ -24,8 +27,19 @@ const FruitDetail = () => {
   const wishList = useSelector((state) => state.wishList);
   const cartQty = useSelector((state) => state.addToCartQty);
   const cart = useSelector((state) => state.addToCart);
+  const authSuccess = useSelector((state) => state.auth.isAuthenticated);
 
   const [qty, setQty] = useState(1);
+  const [signUpModal, setSignUpModal] = useState(false);
+
+  const handleQtyChange = (e) => {
+    const inputQty = parseInt(e.target.value);
+    if (!isNaN(inputQty) && inputQty >= 1) {
+      setQty(inputQty);
+    } else {
+      setQty(1);
+    }
+  };
 
   const dispatch = useDispatch();
 
@@ -48,17 +62,60 @@ const FruitDetail = () => {
   };
 
   const handleCart = (item) => {
-    const existingCartItem = cart.find((cartItem) => cartItem._id === item._id);
+    if (authSuccess) {
+      const existingCartItem = cart.find(
+        (cartItem) => cartItem._id === item._id
+      );
 
-    if (existingCartItem) {
-      const cartItemQty = cartQty[item._id];
-      const newQuantity = cartItemQty ? cartItemQty.quantity + qty : qty;
-      dispatch(addToCartQty(item._id, newQuantity));
+      const availableQuantity = parseInt(item.quantity);
+
+      if (isNaN(availableQuantity) || availableQuantity < qty) {
+        toast.error("Out of Stock!");
+        return;
+      }
+
+      if (existingCartItem) {
+        const cartItemQty = cartQty[item._id];
+        const newQuantity = cartItemQty ? cartItemQty.quantity + qty : qty;
+        dispatch(addToCartQty(item._id, newQuantity));
+        toast.success("Plant added to cart!");
+        const updatedQuantity = parseInt(item.quantity) - qty; 
+        const updatedItem = { ...item, quantity: updatedQuantity }; 
+
+        axios
+          .patch(`http://localhost:3001/api/v1/fruit/${item._id}`, updatedItem)
+          .then((res) => {
+            console.log("Item quantity updated:", res.data);
+          })
+          .catch((error) => {
+            console.error("Error updating item quantity:", error);
+          });
+      } else {
+        const updatedQuantity = parseInt(item.quantity) - qty; 
+        const updatedItem = { ...item, quantity: updatedQuantity }; 
+
+        axios
+          .patch(`http://localhost:3001/api/v1/fruit/${item._id}`, updatedItem)
+          .then((res) => {
+            console.log("Item quantity updated:", res.data);
+          })
+          .catch((error) => {
+            console.error("Error updating item quantity:", error);
+          });
+        dispatch(addToCart(item));
+        dispatch(addToCartQty(item._id, qty));
+        toast.success("Plant added to cart!");
+      }
     } else {
-      dispatch(addToCart(item));
-      dispatch(addToCartQty(item._id, qty));
+      toast.error("You need to do sign in!");
+      setSignUpModal(true);
     }
   };
+
+
+  const handleCloseSignUpModal = () => {
+    setSignUpModal(false)
+  }
   return (
     <div className="h-auto">
       <div className="flex justify-between mt-10 mx-4">
@@ -122,7 +179,12 @@ const FruitDetail = () => {
                 style={{ width: 35, height: 35 }}
               />
             </div>
-            <p className="font-body text-xl font-semibold">{qty}</p>
+            <input
+          
+          value={qty}
+          onChange={handleQtyChange}
+          className="text-center w-16 border-gray-300 border rounded-md py-1"
+            />
 
             <div className="px-3">
               <AddCircleOutline
@@ -138,9 +200,23 @@ const FruitDetail = () => {
                 Add To Cart
               </p>
             </button>
+            <div className="ml-10 flex items-center">
+                <p className="font-body font-semibold text-lg">instock: </p>
+                <span className="font-body font-semibold"> 
+                {parseInt(item.quantity) - qty > 0 ? parseInt(item.quantity) - qty:null}
+                {parseInt(item.quantity) < qty && item.quantity}
+                {parseInt(item.quantity) === qty && 1}</span>
+            </div>
           </div>
         </div>
       </div>
+      <ToastContainer position="top-center" autoClose={1000} />
+      {signUpModal && (
+        <SignUpModal
+          openModal={signUpModal}
+          closeModal={handleCloseSignUpModal}
+        />
+      )}
     </div>
   );
 };

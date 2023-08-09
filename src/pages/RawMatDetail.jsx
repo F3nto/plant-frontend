@@ -1,27 +1,32 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
-import { FavoriteBorderOutlined } from "@mui/icons-material";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  FavoriteBorderOutlined,
+  RemoveCircleOutline,
+  AddCircleOutline,
+} from "@mui/icons-material";
 import {
   addToWishList,
   removeFromWishList,
 } from "../redux/store/actions/wishList";
 import { addToCart } from "../redux/store/actions/addToCart";
 import { addToCartQty } from "../redux/store/actions/addToCartQty";
+import SignUpModal from "../Modal/SignUpModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import SignUpModal from "../Modal/SignUpModal";
 import axios from "axios";
-
-const IndoorDetail = () => {
+const RawMatDetail = () => {
   const location = useLocation();
-  const { item } = location.state;
-  console.log("indoor detail item...", item);
+  const {
+    state: { item },
+  } = location;
+
+  console.log("Fruit detail item...", item);
 
   const wishList = useSelector((state) => state.wishList);
-  const cart = useSelector((state) => state.addToCart);
   const cartQty = useSelector((state) => state.addToCartQty);
+  const cart = useSelector((state) => state.addToCart);
   const authSuccess = useSelector((state) => state.auth.isAuthenticated);
 
   const [qty, setQty] = useState(1);
@@ -78,7 +83,7 @@ const IndoorDetail = () => {
         const updatedItem = { ...item, quantity: updatedQuantity }; 
 
         axios
-          .patch(`http://localhost:3001/api/v1/indoor-plants/${item._id}`, updatedItem)
+          .patch(`http://localhost:3001/api/v1/industiral-raw-material/${item._id}`, updatedItem)
           .then((res) => {
             console.log("Item quantity updated:", res.data);
           })
@@ -90,7 +95,7 @@ const IndoorDetail = () => {
         const updatedItem = { ...item, quantity: updatedQuantity }; 
 
         axios
-          .patch(`http://localhost:3001/api/v1/indoor-plants/${item._id}`, updatedItem)
+          .patch(`http://localhost:3001/api/v1/industiral-raw-material/${item._id}`, updatedItem)
           .then((res) => {
             console.log("Item quantity updated:", res.data);
           })
@@ -107,15 +112,17 @@ const IndoorDetail = () => {
     }
   };
 
-
+  const handleCloseSignUpModal = () => {
+    setSignUpModal(false)
+  }
   return (
     <div className="h-auto">
       <div className="flex justify-between mt-10 mx-4">
         <div className="w-3/4 relative">
           <img
-            src={item.moreDetail.img1}
+            src={item.moreDetail.subImg1}
             alt=""
-            className="w-full h-full object-cover rounded"
+            className="w-full h-full object-cover rounded shadow-black shadow-md"
           />
           <div className="absolute top-3 right-4">
             <button
@@ -124,7 +131,7 @@ const IndoorDetail = () => {
             >
               {wishList.find((wishItem) => wishItem._id === item._id) ? (
                 <img
-                  src={require("../../src/img/icons/lover.png")}
+                  src={require("../img/icons/lover.png")}
                   style={{ width: 25, height: 25 }}
                   alt=""
                 />
@@ -137,7 +144,7 @@ const IndoorDetail = () => {
 
         <div className="ml-8 ">
           <p className="text-lg font-body mb-4 font-bold text-gray-600">
-            Indoor Plant Details
+            {item.name}
           </p>
           <div>
             <span className="font-body font-semibold text-gray-500">
@@ -160,6 +167,10 @@ const IndoorDetail = () => {
               Fertilizer:
             </span>{" "}
             <p className="mb-2">{item.moreDetail.fertilizer}</p>
+            <span className="font-body font-semibold text-gray-500">
+              Description:
+            </span>{" "}
+            <p className="mb-2">{item.moreDetail.description}</p>
           </div>
 
           <div className="border-b-2" />
@@ -213,4 +224,4 @@ const IndoorDetail = () => {
   );
 };
 
-export default IndoorDetail;
+export default RawMatDetail;

@@ -1,11 +1,20 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { ShoppingCart, FavoriteBorderOutlined } from "@mui/icons-material";
 import FavoriteModal from "../Modal/FavoriteModal";
 import SignUpModal from "../Modal/SignUpModal";
 import LoginModal from "../Modal/LoginModal";
-import { useSelector } from "react-redux";
+import { removeUser } from "../redux/store/actions/user";
+import { removeUserEmail } from "../redux/store/actions/email";
+import { logoutSuccess } from "../redux/store/actions/auth";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
+import { clearCart } from "../redux/store/actions/addToCart";
+import { setFlowerData } from "../redux/store/actions/autoComplete";
+import { setFruitData } from "../redux/store/actions/autoComplete";
+import { setIndoorData } from "../redux/store/actions/autoComplete";
+import { setRawMatData } from "../redux/store/actions/autoComplete";
 
+import axios from "axios";
 
 const Header = () => {
   const [searchtxt, setSearchtxt] = useState("");
@@ -20,15 +29,65 @@ const Header = () => {
   const cartQty = useSelector((state) => state.addToCart);
   const [isCurrentRoute, setIsCurrentRoute] = useState(true);
   const [isSignUpModal, setIsSignUpModal] = useState(false);
-  const [isLoginModal, setIsLoginModal] = useState(false)
+  const [isLoginModal, setIsLoginModal] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const location = useLocation();
 
   const user = useSelector((state) => state.addToUser);
   const email = useSelector((state) => state.addToEmail);
+
+  const IndoorData = useSelector((state) => state.setAutoComplete.indoorData);
+  const flowerData = useSelector((state) => state.setAutoComplete.flowerData);
+  const fruitData = useSelector((state) => state.setAutoComplete.fruitData);
+  const rawMatData = useSelector((state) => state.setAutoComplete.rawMatData);
+
+  const allData = useMemo(
+    () => [...IndoorData, ...flowerData, ...fruitData, ...rawMatData],
+    [IndoorData, flowerData, fruitData, rawMatData]
+  );
+  console.log("all data...", allData);
+
+  useEffect(() => {
+    const url1 = "http://localhost:3001/api/v1/flower";
+    const url2 = "http://localhost:3001/api/v1/fruit";
+    const url3 = "http://localhost:3001/api/v1/indoor-plants";
+    const url4 = "http://localhost:3001/api/v1/industiral-raw-material";
+    axios
+      .get(url1)
+      .then((res) => {
+        dispatch(setFlowerData(res.data));
+      })
+      .catch((err) => {
+        console.log("error fetching flower data...", err);
+      });
+
+    axios
+      .get(url2)
+      .then((res) => {
+        dispatch(setFruitData(res.data));
+      })
+      .catch((err) => {
+        console.log("error fetching fruit data...", err);
+      });
+    axios
+      .get(url3)
+      .then((res) => {
+        dispatch(setIndoorData(res.data));
+      })
+      .catch((err) => {
+        console.log("error fetching fruit data...", err);
+      });
+    axios
+      .get(url4)
+      .then((res) => {
+        dispatch(setRawMatData(res.data));
+      })
+      .catch((err) => {
+        console.log("error fetching fruit data...", err);
+      });
+  }, [dispatch]);
 
   const handleNavigate = () => {
     navigate("/");
@@ -42,7 +101,95 @@ const Header = () => {
   const headerRef = useRef(null);
 
   const handleAutoComplete = (event) => {
-    setSearchtxt(event.target.searchtxt);
+    setSearchtxt(event.target.value);
+  };
+
+  const filteredSuggestions = useMemo(() => {
+    if (searchtxt.trim() === "") {
+      return [];
+    } else {
+      return allData.filter((item) =>
+        item.name.toLowerCase().includes(searchtxt.toLowerCase())
+      );
+    }
+  }, [searchtxt, allData]);
+
+  const handleToDetail = (item) => {
+    if (item.type === "indplant") {
+      const queryParams = {
+        _id: item._id,
+        name: item.name,
+        price: item.price,
+        light: item.moreDetail.light,
+        soil: item.moreDetail.soil,
+        water: item.moreDetail.water,
+        temp: item.moreDetail.temp,
+        fertilizer: item.moreDetail.fertilizer,
+      };
+
+      const url = `/indoor-plant-detail?${new URLSearchParams(
+        queryParams
+      ).toString()}`;
+
+      navigate(`${url}`, { state: { item } });
+    } else if (item.type === "flower") {
+      const queryParams = {
+        _id: item._id,
+        name: item.name,
+        price: item.price,
+        subImg: item.subImg,
+        light: item.moreDetail.light,
+        soil: item.moreDetail.soil,
+        water: item.moreDetail.water,
+        temp: item.moreDetail.temp,
+        fertilizer: item.moreDetail.fertilizer,
+        description: item.moreDetail.description,
+      };
+
+      const url = `/flower-detail?${new URLSearchParams(
+        queryParams
+      ).toString()}`;
+
+      navigate(url, { state: { item } });
+    } else if (item.type === "fruit") {
+      const queryParams = {
+        _id: item._id,
+        name: item.name,
+        price: item.price,
+        subImg: item.subImg,
+        light: item.moreDetail.light,
+        soil: item.moreDetail.soil,
+        water: item.moreDetail.water,
+        temp: item.moreDetail.temp,
+        fertilizer: item.moreDetail.fertilizer,
+        description: item.moreDetail.description,
+      };
+
+      const url = `/fruit-detail?${new URLSearchParams(
+        queryParams
+      ).toString()}`;
+
+      navigate(url, { state: { item } });
+    } else if (item.type === "raw") {
+      const queryParams = {
+        _id: item._id,
+        name: item.name,
+        price: item.price,
+        subImg: item.subImg,
+        light: item.moreDetail.light,
+        soil: item.moreDetail.soil,
+        water: item.moreDetail.water,
+        temp: item.moreDetail.temp,
+        fertilizer: item.moreDetail.fertilizer,
+        description: item.moreDetail.description,
+      };
+
+      const url = `/industrial-raw-material-detail?${new URLSearchParams(
+        queryParams
+      ).toString()}`;
+
+      navigate(url, { state: { item } });
+    }
   };
 
   const handleClickHumbager = () => {
@@ -100,23 +247,33 @@ const Header = () => {
     setLoginModal(true);
     setIsLoginModal(true);
     setIsCurrentRoute(false);
-  }
+  };
 
   const handleCloseLoginModal = () => {
     setLoginModal(false);
     setIsLoginModal(false);
-    setIsCurrentRoute(false);
-
-  }
+    setIsCurrentRoute(true);
+  };
 
   const handleUserMenu = () => {
     setIsUserMenuOpen((prev) => !prev);
   };
 
+  const handleLogOut = () => {
+    localStorage.removeItem("username");
+    localStorage.removeItem("email");
+
+    // Clear user data from Redux state
+    dispatch(removeUser());
+    dispatch(removeUserEmail());
+    dispatch(clearCart());
+    dispatch(logoutSuccess());
+  };
+
   return (
     <nav
       ref={headerRef}
-      className={`font-body text-white h-24 bg-opacity-75 flex z-10  border-b-2 border-green-300 ${
+      className={`font-body text-white h-28 bg-opacity-75 flex z-50  border-b-2 border-green-300 ${
         isScrollDown
           ? "sticky top-0 text-black bg-primary transform duration-1000 translate-y-0 border-b-2 border-green-300"
           : ""
@@ -125,14 +282,30 @@ const Header = () => {
     >
       <div className="flex flex-1 justify-between items-center mx-10">
         <div className="flex items-center" style={{ color: "black" }}>
-          <div>logo</div>
+          <div><img className="w-36 mt-6 object-cover" src={require("../img/lupyo.png")} alt=""/></div>
           <input
-            className="p-2 rounded ml-10"
+            className="p-2 rounded ml-10 relative"
             placeholder="Search"
             value={searchtxt}
-            i
             onChange={(event) => handleAutoComplete(event)}
           />
+          {filteredSuggestions.length > 0 && (
+            <div className="absolute top-20 left-56 z-10 mt-2 w-64 bg-white border border-gray-300 rounded-md shadow-lg">
+              {filteredSuggestions.map((suggestion, index) => (
+                <button
+                  onClick={() => handleToDetail(suggestion)}
+                  key={suggestion._id}
+                  className={`block w-full px-4 py-2 text-left hover:bg-green-500 hover:text-white ${
+                    index < filteredSuggestions.length - 1
+                      ? "border-b border-gray-300"
+                      : ""
+                  }`}
+                >
+                  {suggestion.name}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div
@@ -161,13 +334,14 @@ const Header = () => {
             </span>
           </button>
           <button onClick={toLoginModal} className={isClickMenu ? "p-2" : ""}>
-            <span className={`font-body font-semibold px-5 pb-2 hover:text-green-400 hover:underline hover:underline-offset-8 border-green-400 transform hover:scale-110 transition-transform ease-out duration-500
+            <span
+              className={`font-body font-semibold px-5 pb-2 hover:text-green-400 hover:underline hover:underline-offset-8 border-green-400 transform hover:scale-110 transition-transform ease-out duration-500
              ${
-              isLoginModal
-                ? `text-green-400 underline underline-offset-8  border-green-400 `
-                : ""
-            }`}>
-         
+               isLoginModal
+                 ? `text-green-400 underline underline-offset-8  border-green-400 `
+                 : ""
+             }`}
+            >
               Log in
             </span>
           </button>
@@ -214,22 +388,24 @@ const Header = () => {
 
           {isUserMenuOpen && user && (
             <div className="flex flex-col justify-center bg-white text-black absolute right-10 top-16 rounded-md shadow-md mt-3">
-            <div className="bg-green-500 flex justify-center items-center relative h-16">
-            <div className="flex justify-center items-center bg-green-700 w-12 h-12 rounded-full absolute top-10">
-              <p className="text-white font-body font-semibold">
-                {user[0].toUpperCase()}
-              </p>
+              <div className="bg-green-500 flex justify-center items-center relative h-16">
+                <div className="flex justify-center items-center bg-green-700 w-12 h-12 rounded-full absolute top-10">
+                  <p className="text-white font-body font-semibold">
+                    {user[0].toUpperCase()}
+                  </p>
+                </div>
+              </div>
+              <div className="p-5">
+                <p className="font-semibold text-center">{user}</p>
+                <p className="text-sm font-body font-semibold">{email}</p>
+                <button
+                  onClick={handleLogOut}
+                  className="text-md text-blue-500 hover:underline mt-2 font-body"
+                >
+                  Logout
+                </button>
+              </div>
             </div>
-
-            </div>
-            <div className="p-5">
-            <p className="font-semibold text-center">{user}</p>
-            <p className="text-sm font-body font-semibold">{email}</p>
-            <button className="text-md text-blue-500 hover:underline mt-2 font-body">
-              Logout
-            </button>
-            </div>
-          </div>
           )}
         </div>
         <div className="flex">
@@ -272,14 +448,9 @@ const Header = () => {
           closeModal={handleCloseSignUpModal}
         />
       )}
-      {
-       loginModal && (
-        <LoginModal 
-          openModal={loginModal}
-          closeModal={handleCloseLoginModal}
-        />
-       )
-      }
+      {loginModal && (
+        <LoginModal openModal={loginModal} closeModal={handleCloseLoginModal} />
+      )}
     </nav>
   );
 };

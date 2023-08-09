@@ -13,7 +13,8 @@ module.exports = {
           200 : "#26AB8C",
           300 : "#077A6C",
           400 : "#005D4F"
-        }
+        },
+        back : "rgba(0,0,0,0.54)"
       },
        keyframes: {
         "spin-slow": {

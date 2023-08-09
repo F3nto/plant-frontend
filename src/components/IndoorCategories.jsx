@@ -9,7 +9,6 @@ const IndoorCategories = () => {
   const [isHoveredView, setIsHoveredView] = useState(false);
   const [isHoveredWishList, setIsHoveredWishList] = useState(false);
   const [indCate, setIndCate] = useState([]);
-  
 
   const navigate = useNavigate();
 
@@ -28,7 +27,7 @@ const IndoorCategories = () => {
       .catch((err) => {
         console.log("error...", err);
       });
-  }, []);
+  }, [dispatch]);
 
   const handleClickSearch = (item) => {
     console.log("items that go to indoor Detail....", item)

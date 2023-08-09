@@ -48,7 +48,7 @@ const Fruit = () => {
       .catch((err) => {
         console.log("error...", err);
       });
-  }, []);
+  }, [dispatch]);
 
   const handleClickSearch = (item) => {
     console.log("fruit items...", item);

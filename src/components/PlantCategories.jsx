@@ -45,6 +45,9 @@ const PlantCategories = () => {
       case "နှစ်ရှည်သီးပင်စားပင်များ":
         url = "/fruit";
         break;
+      case "စက်မှုကုန်ကြမ်းသုံး အပင်များ":
+        url = "/industrial-raw-material"
+        break;
       default : 
       alert("No data...")
     }

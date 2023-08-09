@@ -5,13 +5,11 @@ import InputAdornment from "@mui/material/InputAdornment";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { addToUser } from "../redux/store/actions/user";
-import { addToEmail } from "../redux/store/actions/email";
-import { loginSuccess } from "../redux/store/actions/auth";
+import { adminLoginSuccess } from "../redux/store/actions/adminAuth"
 import { useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 
-const LoginModal = ({ openModal, closeModal }) => {
+const AdminLogin= ({ openAdminModal, closeAdminModal }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,31 +22,19 @@ const LoginModal = ({ openModal, closeModal }) => {
     setError(""); // clear error
 
     try {
-      const response = await axios.post("http://localhost:3001/login", {
+      const response = await axios.post("http://localhost:3001/admin-login", {
         email: formData.email,
         password: formData.password,
       });
 
       if (response.status === 200 && response.data.success) {
-        const { email, username } = response.data.user;
-        
         // Save the user data in localStorage
-        localStorage.setItem("username", username);
-        localStorage.setItem("email", email);
-        dispatch(addToUser(username));
-        dispatch(addToEmail(email));
-        dispatch(loginSuccess());
-        navigate("/");
-        toast.success("Login successful!");
-      } else if (response.status === 409) {
-        // already sign up
-        setError("User already signed up. Please log in with the correct credentials.");
-        toast.error("User already signed up!");
-      } else {
-        setError("Invalid email or password. Please try again.");
-      }
+        dispatch(adminLoginSuccess())
+        navigate('/admin-dashboard')
+        toast.success("Admin Login successful!");
+      } 
     } catch (error) {
-      toast.error("Please make sign up!");
+      toast.error("Admin Login Error!");
       console.error("Error during login:", error);
       setError("An error occurred during login. Please try again later.");
     }         
@@ -59,17 +45,17 @@ const LoginModal = ({ openModal, closeModal }) => {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
-  if (!openModal) return null;
+  if (!openAdminModal) return null;
 
   return (
     <div className="flex items-center justify-center bg-black bg-opacity-50 fixed inset-0 h-screen">
       <div className="bg-white w-1/3 rounded-md shadow-lg p-6 border-green-700 border-[3px] relative">
         <div>
-          <h1 className="font-body font-semibold text-black text-2xl mb-4">Login</h1>
+          <h1 className="font-body font-semibold text-black text-2xl mb-4">Admin Login</h1>
         </div>
         <button
           className="absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-700"
-          onClick={closeModal}
+          onClick={closeAdminModal}
         >
           <Close />
         </button>
@@ -133,8 +119,9 @@ const LoginModal = ({ openModal, closeModal }) => {
         </form>
       </div>
       <ToastContainer position="top-center" autoClose={1000} />
+    
     </div>
   );
 };
 
-export default LoginModal;
+export default AdminLogin;
