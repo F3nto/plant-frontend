@@ -1,11 +1,24 @@
-import React from "react";
+import React, {useState} from "react";
 import { Close } from "@mui/icons-material";
+import PaymentModal from "./PaymentModal";
 
-const CheckOutModal = ({ openModal, closeModal, voucherData, navigate }) => {
+const CheckOutModal = ({ openModal, closeModal, voucherData }) => {
+  const [showPaymentModal, setShowPaymentModal] = useState(false)
+
   if (!openModal) return null;
 
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString('en-GB');
+
+
+  const handlePaymentModal = () => {
+    setShowPaymentModal(false)
+  }
+
+  const handlePayment = () => {
+
+    setShowPaymentModal(true);
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -103,7 +116,7 @@ const CheckOutModal = ({ openModal, closeModal, voucherData, navigate }) => {
 
         <div className="flex justify-end mt-6">
           <button
-            onClick={navigate}
+            onClick={handlePayment}
             className="px-4 py-2 mr-2 font-semibold text-white bg-green-700 rounded hover:bg-green-600 focus:outline-none"
           >
             Proceed to Payment
@@ -116,6 +129,7 @@ const CheckOutModal = ({ openModal, closeModal, voucherData, navigate }) => {
           </button>
         </div>
       </div>
+      <PaymentModal openPaymentModal={showPaymentModal} closePaymentModal = {handlePaymentModal} />
     </div>
   );
 };

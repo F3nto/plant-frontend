@@ -18,13 +18,12 @@ import { loginSuccess } from "../redux/store/actions/auth";
 import { useDispatch } from "react-redux";
 import LoginModal from "./LoginModal";
 
-
 const SignUpModal = ({ openModal, closeModal }) => {
   const [agreed, setAgreed] = useState(false);
   const [passwordStrong, setPasswordStrong] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(true);
-
+  const [emailStrong, setEmailStrong] = useState(false);
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
@@ -32,6 +31,12 @@ const SignUpModal = ({ openModal, closeModal }) => {
     email: "",
     password: "",
   });
+
+  const isEmailValid = (email) => {
+    // Regular expression to validate email address format
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    return emailRegex.test(email);
+  };
 
   const isPasswordValid = (password) => {
     return /^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(password); // password checking
@@ -46,6 +51,12 @@ const SignUpModal = ({ openModal, closeModal }) => {
     } else {
       setPasswordStrong(false); // Password is not strong
     }
+
+    // if (isEmailValid(formData.email)) {
+    //   setEmailStrong(true);
+    // } else {
+    //   setEmailStrong(false);
+    // }
   };
 
   const createUser = async () => {
@@ -82,7 +93,20 @@ const SignUpModal = ({ openModal, closeModal }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (passwordStrong && agreed) {
+
+    if (isPasswordValid(formData.password)) {
+      setPasswordStrong(true); // Password is strong
+    } else {
+      setPasswordStrong(false); // Password is not strong
+    }
+
+    if (
+      isEmailValid(formData.email) &&
+      passwordStrong &&
+      agreed &&
+      agreed &&
+      formData.username !== ""
+    ) {
       createUser()
         .then((res) => {
           console.log(res);
@@ -178,6 +202,13 @@ const SignUpModal = ({ openModal, closeModal }) => {
                   }}
                 />
               </div>
+              {/* <p
+                className={`font-body text-sm ${
+                  emailStrong ? "text-green-800" : "text-red-600"
+                }`}
+              >
+                {emailStrong ? "email valid" : "email must be valid"}
+              </p> */}
               <div className="relative mt-1 font-body shadow-green-700 border-green-700 font-semibold text-black block w-full shadow-md rounded-md">
                 <TextField
                   id="password"
@@ -207,8 +238,8 @@ const SignUpModal = ({ openModal, closeModal }) => {
                 }`}
               >
                 {passwordStrong
-                  ? "Password is strong."
-                  : "Password must be 8 characters including numbers."}
+                  ? "Password is strong"
+                  : "Password must be 8 characters including numbers"}
               </p>
 
               <div className="flex justify-center item-center">
@@ -226,7 +257,25 @@ const SignUpModal = ({ openModal, closeModal }) => {
                 </div>
                 <div className="">
                   <p className="font-body font-semibold text-green-800 pt-2">
-                    I agree with terms and privacy.
+                    I agree with{" "}
+                    <a
+                      href="https://www.google.com/policies/terms/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-800 hover:underline cursor-pointer"
+                    >
+                      terms
+                    </a>{" "}
+                    and{" "}
+                    <a
+                      href="https://policies.google.com/privacy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-800 hover:underline cursor-pointer"
+                    >
+                      privacy
+                    </a>
+                    .
                   </p>
                 </div>
               </div>
@@ -264,7 +313,6 @@ const SignUpModal = ({ openModal, closeModal }) => {
       {loginModal && (
         <LoginModal openModal={loginModal} closeModal={handleCloseLoginModal} />
       )}
-
     </>
   );
 };

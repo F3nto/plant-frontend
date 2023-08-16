@@ -93,11 +93,11 @@ const PlantCarousel = () => {
           })}
         </div>
 
-        <div className="flex absolute top-0 bottom-0 left-0 right-0 sm:md:lg:right-2/3 mb-4">
+        {/* <div className="flex absolute top-0 bottom-0 left-0 right-0 sm:md:lg:right-2/3 mb-4">
           <div className="px-5 py-3 justify-center items-center m-auto bg-primary rounded">
             <button className="font-body font-bold">See More</button>
           </div>
-        </div>
+        </div> */}
         <div className="flex absolute bottom-0 left-20 sm:left-44 top-48 sm:md:lg:top-44 right-0 sm:md:lg:right-1/3">
           <div className="m-auto">
             <p className="font-extrabold bg-clip-text text-white shadow-black shadow-sm w-full">

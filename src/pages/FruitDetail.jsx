@@ -70,7 +70,7 @@ const FruitDetail = () => {
       const availableQuantity = parseInt(item.quantity);
 
       if (isNaN(availableQuantity) || availableQuantity < qty) {
-        toast.error("Out of Stock!");
+        toast.error("Order Exceeded!");
         return;
       }
 
@@ -205,7 +205,7 @@ const FruitDetail = () => {
                 <span className="font-body font-semibold"> 
                 {parseInt(item.quantity) - qty > 0 ? parseInt(item.quantity) - qty:null}
                 {parseInt(item.quantity) < qty && item.quantity}
-                {parseInt(item.quantity) === qty && 1}</span>
+                {parseInt(item.quantity) === qty && 0}</span>
             </div>
           </div>
         </div>

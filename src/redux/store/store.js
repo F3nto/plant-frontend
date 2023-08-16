@@ -9,6 +9,9 @@ import autoCompleteReducer from "./reducers/autoComplete";
 import adminReducer from "./reducers/admin";
 import adminAuthReducer from "./reducers/adminAuth";
 import adminEmailReducer from "./reducers/adminEmail";
+import instockLeftReducer from "./reducers/instock";
+import checkoutReducer from "./reducers/voucher";
+
 
 const store = configureStore({
   reducer: {
@@ -21,7 +24,10 @@ const store = configureStore({
     auth : authReducer,
     adminAuth : adminAuthReducer,
     setAutoComplete : autoCompleteReducer,
-    addToAdmin : adminReducer
+    addToAdmin : adminReducer,
+    updateInstockLeft : instockLeftReducer,
+    setCheckoutData : checkoutReducer,
+    
   },
 });
 

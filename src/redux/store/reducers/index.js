@@ -9,6 +9,8 @@ import autoCompleteReducer from './autoComplete';
 import adminReducer from './admin';
 import adminAuthReducer from './adminAuth';
 import adminEmailReducer from './adminEmail';
+import instockLeftReducer from './instock';
+import checkoutReducer from './voucher';
 
 const rootReducer = combineReducers({
   wishList: wishListReducer,
@@ -20,8 +22,11 @@ const rootReducer = combineReducers({
   auth : authReducer,
   setAutoComplete : autoCompleteReducer,
   addToAdmin : adminReducer,
-  adminAuth : adminAuthReducer
-  
+  adminAuth : adminAuthReducer,
+  updateInstockLeft  : instockLeftReducer,
+  setCheckoutData : checkoutReducer,
+
+ 
 });
 
 export default rootReducer;

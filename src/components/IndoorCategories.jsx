@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FavoriteBorderOutlined, SearchOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { addToWishList , removeFromWishList} from "../redux/store/actions/wishList";
-
+import IndoorPagination from "../components/Paginate/IndoorPagination"
 const IndoorCategories = () => {
   const [isHoveredView, setIsHoveredView] = useState(false);
   const [isHoveredWishList, setIsHoveredWishList] = useState(false);
@@ -15,6 +15,16 @@ const IndoorCategories = () => {
   const dispatch = useDispatch();
 
   const wishList = useSelector((state) => state.wishList);
+
+  const [currentPage, setCurrentPage] = useState(1); 
+
+  const itemPerPage = 9;
+
+  const lastItemIndex = currentPage * itemPerPage; 
+
+  const firstItemIndex = lastItemIndex - itemPerPage; 
+
+  const currentPosts = indCate.slice(firstItemIndex, lastItemIndex); 
 
   useEffect(() => {
     const url = "http://localhost:3001/api/v1/indoor-plants";
@@ -64,7 +74,7 @@ const IndoorCategories = () => {
         </h2>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mx-16">
-        {indCate.map((item, index) => {
+        {currentPosts.map((item, index) => {
           return (
             <div
               key={index}
@@ -152,6 +162,14 @@ const IndoorCategories = () => {
             </div>
           );
         })}
+      </div>
+      <div className="flex justify-center pb-10">
+      <IndoorPagination
+            totalLength={indCate.length}
+            itemPerPage={itemPerPage}
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+          />
       </div>
     </div>
   );

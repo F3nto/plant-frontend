@@ -8,6 +8,8 @@ import RawPagination from "../components/Paginate/RawPagination";
 import IndoorPagination from "../components/Paginate/IndoorPagination";
 import { ArrowBack, Delete } from "@mui/icons-material";
 import { ToastContainer, toast } from "react-toastify";
+import {useSelector} from "react-redux"
+import {List} from "@mui/icons-material"
 import "react-toastify/dist/ReactToastify.css";
 
 const AdminDashboard = () => {
@@ -15,11 +17,15 @@ const AdminDashboard = () => {
   const [isClickFruit, setIsClickFruit] = useState(false);
   const [isClickRaw, setIsClickRaw] = useState(false);
   const [isClickIndoor, setIsClickIndoor] = useState(false);
+  const [isClickOrder, setIsClickOrder] = useState(false);
 
   const [showInputForm, setShowInputForm] = useState(false);
   const [showFruitInputForm, setShowFruitInputForm] = useState(false);
   const [showRawMatInputForm, setShowRawMatInputForm] = useState(false);
   const [showIndoorInputForm, setShowIndoorInputForm] = useState(false);
+
+  const voucherData = useSelector((state) => state.setCheckoutData);
+  console.log("voucher data ...", voucherData)
 
   const [newItem, setNewItem] = useState({
     name: "",
@@ -131,6 +137,7 @@ const AdminDashboard = () => {
     setIsClickFlower(true);
     setIsClickFruit(false);
     setIsClickRaw(false);
+    setIsClickOrder(false)
     setIsClickIndoor(false);
 
     const url = "http://localhost:3001/api/v1/flower";
@@ -151,7 +158,7 @@ const AdminDashboard = () => {
       .post("http://localhost:3001/api/v1/flower", newItem)
       .then((res) => {
         console.log(res.data);
-        toast.success("New Plant Created!!!")
+        toast.success("Admin added plant succefully!")
       })
       .catch((err) => {
         console.log("Error:", err);
@@ -173,8 +180,6 @@ const AdminDashboard = () => {
   console.error('Error deleting flower:', error);
  
   });
-
-
   }
 
   const handleFruit = () => {
@@ -182,6 +187,7 @@ const AdminDashboard = () => {
     setIsClickFruit(true);
     setIsClickRaw(false);
     setIsClickIndoor(false);
+    setIsClickOrder(false);
 
     const url = "http://localhost:3001/api/v1/fruit";
     axios
@@ -200,9 +206,11 @@ const AdminDashboard = () => {
       .post("http://localhost:3001/api/v1/fruit", newFruitItem)
       .then((res) => {
         console.log(res.data);
+        toast.success("Admin added plant succefully!")
       })
       .catch((err) => {
         console.log("Error:", err);
+
       });
     }else{
       toast.error("Please fill all field!!!")
@@ -228,6 +236,7 @@ const AdminDashboard = () => {
     setIsClickFruit(false);
     setIsClickRaw(true);
     setIsClickIndoor(false);
+    setIsClickOrder(false);
 
     const url = "http://localhost:3001/api/v1/industiral-raw-material";
     axios
@@ -248,7 +257,9 @@ const AdminDashboard = () => {
         newRawMatItem
       )
       .then((res) => {
+
         console.log(res.data);
+        toast.success("Admin added plant succefully!")
       })
       .catch((err) => {
         console.log("Error:", err);
@@ -297,6 +308,7 @@ const AdminDashboard = () => {
       .post("http://localhost:3001/api/v1/indoor-plants", newIndoorItem)
       .then((res) => {
         console.log(res.data);
+        toast.success("Admin added plant succefully!")
       })
       .catch((err) => {
         console.log("Error:", err);
@@ -419,6 +431,12 @@ const AdminDashboard = () => {
 
   }
 
+  const handleOrder = () => {
+    setIsClickOrder(true)
+    setIsClickFlower(false);
+    setIsClickFruit(false);
+    setIsClickIndoor(false);
+  }
   return (
     <div
       style={{
@@ -498,11 +516,35 @@ const AdminDashboard = () => {
                 />
                 <p className="font-body font-semibold text-lg ml-2">Indoor</p>
               </button>
+
+              <button
+                onClick={handleOrder}
+                className={`flex items-center py-1 hover:bg-green-200 hover:w-60 hover:rounded-md ${
+                  isClickOrder ? "bg-green-400 w-60 rounded-md" : ""
+                }`}
+              >
+                <List />
+                <p className="font-body font-semibold text-lg ml-2">Order</p>
+              </button>
             </div>
           </div>
 
+
+
+
+
+
           <div className="mt-10 relative">
             <div className="h-auto">
+              {isClickOrder && 
+            
+                <div className="flex text-black">
+                  {voucherData?.price}
+
+                </div>
+              
+             
+              }
               {isClickFlower ? (
                 <button
                   onClick={() => setShowInputForm(true)}
@@ -579,7 +621,7 @@ const AdminDashboard = () => {
                           Quantity:
                           <input
                             className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-green-300"
-                            type="text"
+                            type="number"
                             value={newItem.quantity}
                             onChange={(e) =>
                               setNewItem({ ...newItem, quantity: e.target.value })
@@ -986,7 +1028,7 @@ const AdminDashboard = () => {
                           Quantity:
                           <input
                             className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-green-300"
-                            type="text"
+                            type="number"
                             value={newFruitItem.quantity}
                             onChange={(e) =>
                               setNewFruitItem({
@@ -1309,7 +1351,7 @@ const AdminDashboard = () => {
                           Quantity:
                           <input
                             className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-green-300"
-                            type="text"
+                            type="number"
                             value={newRawMatItem.quantity}
                             onChange={(e) =>
                               setNewRawMatItem({
@@ -1634,7 +1676,7 @@ const AdminDashboard = () => {
                           Quantity:
                           <input
                             className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-green-300"
-                            type="text"
+                            type="number"
                             value={newIndoorItem.quantity}
                             onChange={(e) =>
                               setNewIndoorItem({

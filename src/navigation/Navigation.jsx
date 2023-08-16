@@ -12,6 +12,7 @@ import AddToCart from "../pages/AddToCart";
 import FlowerDetail from "../pages/FlowerDetail";
 import RawMat from "../pages/RawMat";
 import RawMatDetail from "../pages/RawMatDetail";
+import AboutUs from "../pages/AboutUs";
 
 //! admin
 
@@ -43,6 +44,7 @@ const Navigation = () => {
         <Route path="/add-to-cart" Component={AddToCart} />
         <Route path="/flower-detail" Component={FlowerDetail} />
         <Route path="/industrial-raw-material" Component={RawMat} />
+        <Route path="/about-us" Component={AboutUs}/>
         <Route
           path="/industrial-raw-material-detail"
           Component={RawMatDetail}

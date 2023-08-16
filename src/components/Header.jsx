@@ -270,6 +270,11 @@ const Header = () => {
     dispatch(logoutSuccess());
   };
 
+  const handleAboutUs = () => {
+    navigate("/about-us")
+
+  }
+
   return (
     <nav
       ref={headerRef}
@@ -328,9 +333,9 @@ const Header = () => {
               Home
             </span>
           </button>
-          <button className={isClickMenu ? "p-2" : ""}>
+          <button onClick={handleAboutUs} className={isClickMenu ? "p-2" : ""}>
             <span className="font-body font-semibold px-5 pb-6 hover:text-green-400 hover:underline hover:underline-offset-8 border-green-400 transform hover:scale-110 transition-transform ease-out duration-500">
-              About
+              About Us
             </span>
           </button>
           <button onClick={toLoginModal} className={isClickMenu ? "p-2" : ""}>

@@ -16,6 +16,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SignUpModal from "../Modal/SignUpModal";
 import axios from "axios";
+
 const FlowerDetail = () => {
   const location = useLocation();
   const {
@@ -61,6 +62,8 @@ const FlowerDetail = () => {
     }
   };
 
+  
+
   const handleCart = (item) => {
     if (authSuccess) {
       const existingCartItem = cart.find(
@@ -70,7 +73,7 @@ const FlowerDetail = () => {
       const availableQuantity = parseInt(item.quantity);
 
       if (isNaN(availableQuantity) || availableQuantity < qty) {
-        toast.error("Out of Stock!");
+        toast.error("Order Exceeded!");
         return;
       }
 
@@ -199,11 +202,11 @@ const FlowerDetail = () => {
               </p>
             </button>
             <div className="ml-10 flex items-center">
-              <p className="font-body font-semibold text-lg">instock: </p>
+              <p className="font-body font-semibold text-lg">instock-left: </p>
               <span className="font-body font-semibold">
                 {parseInt(item.quantity) - qty > 0 ? parseInt(item.quantity) - qty:null}
                 {parseInt(item.quantity) < qty && item.quantity}
-                {parseInt(item.quantity) === qty && 1}
+                {parseInt(item.quantity) === qty && 0}
               </span>
             </div>
           </div>

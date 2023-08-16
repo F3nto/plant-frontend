@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AddCircle, RemoveCircle } from "@mui/icons-material";
-import { removeFromCart } from "../redux/store/actions/addToCart";
-import { addToCartQty } from "../redux/store/actions/addToCartQty";
 import myanmarData from "../myanmar.json";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import CheckOutModal from "../Modal/CheckOutModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { setCheckoutData } from "../redux/store/actions/voucher"
 
 const AddToCart = () => {
   const cart = useSelector((state) => state.addToCart);
   const cartQty = useSelector((state) => state.addToCartQty);
-
+  // const instock = useSelector((state) => state.updateInstockLeft)
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [otherAddr, setOtherAddr] = useState("");
   const [stateError, setStateError] = useState(false);
   const [cityError, setCityError] = useState(false);
   const [addressError, setAddressError] = useState(false);
-
+  
   const [checkOutModal, setCheckOutModal] = useState(false);
   const [voucherData, setVoucherData] = useState(null);
 
@@ -47,21 +47,31 @@ const AddToCart = () => {
 
   const dispatch = useDispatch();
 
-  const handleDecreaseQty = (item) => {
-    const cartItemQty = cartQty[item._id];
-    if (cartItemQty?.quantity > 1) {
-      const newQuantity = cartItemQty?.quantity - 1;
-      dispatch(addToCartQty(item._id, newQuantity));
-    } else if (cartItemQty?.quantity === 1) {
-      dispatch(removeFromCart(item._id));
-    }
-  };
+  // const handleDecreaseQty = (item) => {
+  //   const cartItemQty = cartQty[item._id];
+  //   if (cartItemQty?.quantity > 1) {
+  //     const newQuantity = cartItemQty?.quantity - 1;
+  //     dispatch(addToCartQty(item._id, newQuantity));
+     
+  //     dispatch(updateInstockLeft(item._id, instock[item._id] + 1))
+  //   } else if (cartItemQty?.quantity === 1) {
+  //     dispatch(removeFromCart(item._id));
+  //     dispatch(updateInstockLeft(item._id, instock[item._id] + 1));
+  //   }
+  // };
 
-  const handleIncreaseQty = (item) => {
-    const cartItemQty = cartQty[item._id];
-    const newQuantity = cartItemQty ? cartItemQty?.quantity + 1 : 1;
-    dispatch(addToCartQty(item._id, newQuantity));
-  };
+  // const handleIncreaseQty = (item) => {
+  //   const cartItemQty = cartQty[item._id];
+    
+  //   dispatch(updateInstockLeft(item._id, instock[item._id] - 1));
+    
+  //   if (cartItemQty && cartItemQty.quantity >= parseInt(item.quantity)) {
+  //     toast.error("Out of Stock!");
+  //     return;
+  //   }
+  //   const newQuantity = cartItemQty ? cartItemQty?.quantity + 1 : 1;
+  //   dispatch(addToCartQty(item._id, newQuantity));
+  // };
 
   const allTotal = cart.reduce((total, item) => {
     const cartItemQty = cartQty[item._id];
@@ -75,43 +85,48 @@ const AddToCart = () => {
     } else {
       setStateError(false);
     }
-  
+
     if (selectedCity === null) {
       setCityError(true);
     } else {
       setCityError(false);
     }
-  
+
     if (otherAddr.trim() === "") {
       setAddressError(true);
     } else {
       setAddressError(false);
     }
-  
-    if (selectedState !== null && selectedCity !== null && otherAddr.trim() !== "") {
+
+    if (
+      selectedState !== null &&
+      selectedCity !== null &&
+      otherAddr.trim() !== ""
+    ) {
       const dataForVoucher = {
-        items: cart.map(item => ({
+        items: cart.map((item) => ({
           subImg: item.subImg,
           name: item.name,
           price: item.price,
           quantity: cartQty[item._id]?.quantity,
           total: cartQty[item._id]?.quantity * parseInt(item.price),
-          
         })),
-        allTotal : allTotal,
+        allTotal: allTotal,
         selectedState: selectedState.value,
         selectedCity: selectedCity.value,
         otherAddr: otherAddr.trim(),
       };
-  
+      dispatch(setCheckoutData(dataForVoucher))
       setCheckOutModal(true);
       setVoucherData(dataForVoucher);
     }
   };
-  
 
   return (
-    <div className="h-full bg-gradient-to-r from-white to-gray-300" style = {{minHeight:"110vh"}}>
+    <div
+      className="h-full bg-gradient-to-r from-white to-gray-300"
+      style={{ minHeight: "110vh" }}
+    >
       <div className="flex justify-center items-center">
         <p className="font-body text-4xl font-semibold text-secondary-300 mt-16">
           Your Cart Items
@@ -123,13 +138,19 @@ const AddToCart = () => {
             <table className="table-auto w-full border-collapse">
               <thead>
                 <tr className="bg-green-700">
-                  <th className="px-4 py-2 border font-body text-white">Product Name</th>
+                  <th className="px-4 py-2 border font-body text-white">
+                    Product Name
+                  </th>
                   <th className="px-4 py-2 border font-body text-white">Qty</th>
-                  <th className="px-4 py-2 border font-body text-white">Price</th>
-                  <th className="px-4 py-2 border font-body text-white">Total</th>
+                  <th className="px-4 py-2 border font-body text-white">
+                    Price
+                  </th>
+                  <th className="px-4 py-2 border font-body text-white">
+                    Total
+                  </th>
                 </tr>
               </thead>
-    
+
               {cart.map((item, index) => {
                 const cartItemQty = cartQty[item._id];
                 const total = cartItemQty?.quantity * parseInt(item.price);
@@ -147,21 +168,11 @@ const AddToCart = () => {
                       </th>
                       <th className="px-4 py-2 border font-body">
                         <div className="flex items-center justify-center">
-                          <div>
-                            <RemoveCircle
-                              onClick={() => handleDecreaseQty(item)}
-                              style={{ width: 30, height: 30, marginLeft: 5 }}
-                            />
-                          </div>
+
                           <p className="font-body px-2">
                             {cartItemQty?.quantity}
                           </p>
-                          <div>
-                            <AddCircle
-                              onClick={() => handleIncreaseQty(item)}
-                              style={{ width: 30, height: 30, marginRight: 5 }}
-                            />
-                          </div>
+                         
                         </div>
                       </th>
                       <th className="px-4 py-2 border font-body">
@@ -253,7 +264,9 @@ const AddToCart = () => {
                   </span>
                   <input
                     className={`h-10 w-56 p-2 text-sm  shadow-black shadow-sm ${
-                      addressError ? "border-red-500 border-[1px] shadow-black shadow-sm" : " "
+                      addressError
+                        ? "border-red-500 border-[1px] shadow-black shadow-sm"
+                        : " "
                     }`}
                     placeholder="Village/Quarters/Street"
                     value={otherAddr}
@@ -285,9 +298,11 @@ const AddToCart = () => {
       <CheckOutModal
         openModal={checkOutModal}
         closeModal={() => setCheckOutModal(false)}
-        voucherData = {voucherData}
-        navigate = {navigate}
-       />
+        voucherData={voucherData}
+        navigate={navigate}
+      />
+      <ToastContainer position="top-center" autoClose={1000} />
+  
     </div>
   );
 };

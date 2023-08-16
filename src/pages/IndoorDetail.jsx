@@ -65,7 +65,7 @@ const IndoorDetail = () => {
       const availableQuantity = parseInt(item.quantity);
 
       if (isNaN(availableQuantity) || availableQuantity < qty) {
-        toast.error("Out of Stock!");
+        toast.error("Order Exceeded!");
         return;
       }
 
@@ -107,6 +107,11 @@ const IndoorDetail = () => {
     }
   };
 
+  
+  const handleCloseSignUpModal = () => {
+    setSignUpModal(false)
+  }
+ 
 
   return (
     <div className="h-auto">
@@ -196,7 +201,7 @@ const IndoorDetail = () => {
                 <span className="font-body font-semibold">
                 {parseInt(item.quantity) - qty > 0 ? parseInt(item.quantity) - qty:null}
                 {parseInt(item.quantity) < qty && item.quantity}
-                {parseInt(item.quantity) === qty && 1}
+                {parseInt(item.quantity) === qty && 0}
                 </span>
             </div>
           </div>

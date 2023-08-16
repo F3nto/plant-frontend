@@ -75,7 +75,8 @@ const Flower = () => {
   }, [dispatch]);
 
   return (
-    <div className="h-full mx-10 my-10">
+    <div className=" bg-gradient-to-r from-white to-green-300 h-full flex">
+    <div className=" mx-10 my-10">
       <div className="pl-8">
         <h1 className="text-lg font-semibold font-body">
           Horticultural plants (ဥယျာဉ်ခြံပန်းမန်အပင်များ)
@@ -175,6 +176,7 @@ const Flower = () => {
             currentPage={currentPage}
           />
         </div>
+    </div>
     </div>
   );
 };
